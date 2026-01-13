@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Laravel's `Illuminate\Http\Request` class provides an object-oriented way to interact with the current HTTP request being handled by your application as well as retrieve the input, cookies, and files that were submitted with the request.
+Laravel's `Illuminate\Http.Request` class provides an object-oriented way to interact with the current HTTP request being handled by your application as well as retrieve the input, cookies, and files that were submitted with the request.
 
 ## Technical Definition
 
@@ -495,6 +495,9 @@ $path = $request->photo->storeAs('images', 'filename.jpg', 's3');
 5. **Leverage Laravel's input normalization** for consistent data handling
 6. **Use `old()` helper** for form repopulation after validation errors
 7. **Consider security implications** when working with request data
+8. **Use appropriate input retrieval methods** based on data type (integer(), boolean(), etc.)
+9. **Validate file uploads** using `isValid()` before processing
+10. **Sanitize input data** before storing or using it
 
 ## Common Pitfalls
 
@@ -503,6 +506,11 @@ $path = $request->photo->storeAs('images', 'filename.jpg', 's3');
 3. **Ignoring file upload validation** - always check `isValid()` before processing uploaded files
 4. **Overusing dynamic properties** - prefer explicit method calls for better code maintainability
 5. **Not handling missing input** - always provide default values or proper error handling
+6. **Trust all input blindly** - never trust user input without proper validation
+7. **Forgetting to sanitize input** - clean and sanitize input before using it
+8. **Incorrectly handling arrays in input** - use proper dot notation for nested arrays
+9. **Not properly handling file paths** - validate file paths to prevent directory traversal attacks
+10. **Exposing sensitive data in error messages** - avoid revealing internal details in error responses
 
 ## Visualization
 
