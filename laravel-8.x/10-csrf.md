@@ -233,6 +233,128 @@ graph TD
     E -->|Sent with| F[AJAX Requests]
 ```
 
+## X-XSRF-TOKEN: Detailed Technical Explanation
+
+### Technical Definition
+
+The `X-XSRF-TOKEN` is a HTTP request header used for CSRF protection in modern web applications. It's part of a two-token system where:
+
+1. **XSRF-TOKEN Cookie**: An encrypted cookie containing the CSRF token, automatically set by Laravel
+2. **X-XSRF-TOKEN Header**: The HTTP header that should contain the same token value for validation
+
+### How It Works
+
+```mermaid
+graph TD
+    A[Laravel Backend] -->|1. Sets encrypted| B[XSRF-TOKEN Cookie]
+    B -->|2. Browser stores| C[Client Cookies]
+    C -->|3. JavaScript reads| D[X-XSRF-TOKEN Header]
+    D -->|4. Sent with| E[AJAX Requests]
+    E -->|5. Laravel validates| F[Token Matching]
+    F -->|6. Success| G[Request Processed]
+    F -->|7. Failure| H[419 Error]
+```
+
+### Technical Flow
+
+1. **Cookie Generation**: Laravel automatically includes an encrypted `XSRF-TOKEN` cookie in every HTTP response
+2. **Cookie Storage**: Browser stores the cookie (HttpOnly flag prevents JavaScript access)
+3. **Header Extraction**: JavaScript frameworks read the cookie and set it as `X-XSRF-TOKEN` header
+4. **Request Validation**: Laravel's CSRF middleware compares cookie value with header value
+
+### Code Implementation
+
+#### Laravel Configuration
+
+Laravel automatically handles XSRF-TOKEN through the `VerifyCsrfToken` middleware. The cookie is set in `config/session.php`:
+
+```php
+// config/session.php
+'cookie' => [
+    'name' => 'laravel_session',
+    'secure' => env('SESSION_SECURE_COOKIE'),
+    'http_only' => true,
+    'same_site' => 'lax',
+],
+
+// XSRF-TOKEN is automatically handled by Laravel's CSRF middleware
+```
+
+#### JavaScript Frameworks Integration
+
+**Axios (Automatic Handling)**:
+```javascript
+// resources/js/bootstrap.js
+import axios from 'axios';
+
+// Axios automatically handles X-XSRF-TOKEN
+axios.defaults.withCredentials = true;
+
+// When making requests:
+axios.post('/api/data', { key: 'value' })
+    .then(response => console.log(response.data));
+```
+
+**Manual Implementation**:
+```javascript
+// Get XSRF-TOKEN from cookie
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+// Set up Axios with manual XSRF token handling
+const axiosInstance = axios.create({
+    headers: {
+        'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+    },
+    withCredentials: true
+});
+```
+
+#### Server-Side Validation
+
+Laravel's `VerifyCsrfToken` middleware automatically validates the token:
+
+```php
+// app/Http/Middleware/VerifyCsrfToken.php
+protected function tokensMatch($request)
+{
+    $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
+    
+    if (!$token && $header = $request->header('X-XSRF-TOKEN')) {
+        $token = $this->encrypter->decrypt($header, static::serialized());
+    }
+    
+    return $request->session()->token() === $token;
+}
+```
+
+### Security Features
+
+1. **Encryption**: The cookie value is encrypted using Laravel's encrypter
+2. **HttpOnly**: Prevents JavaScript access to the cookie (when configured)
+3. **SameSite**: Typically set to 'lax' for CSRF protection
+4. **Automatic Handling**: Modern frameworks (Axios, Angular) automatically handle this header
+
+### Comparison with Other Methods
+
+| Method | Storage | Usage | Framework Support |
+|--------|---------|-------|------------------|
+| X-XSRF-TOKEN | Encrypted Cookie | AJAX requests | Axios, Angular |
+| X-CSRF-TOKEN | Meta tag | AJAX requests | jQuery, custom |
+| @csrf directive | Hidden form field | HTML forms | Blade templates |
+
+### Best Practices
+
+1. **Use with HTTPS**: Always use X-XSRF-TOKEN over HTTPS connections
+2. **Framework Integration**: Leverage built-in framework support when available
+3. **Cookie Configuration**: Ensure proper cookie settings (Secure, HttpOnly, SameSite)
+4. **Fallback Mechanism**: Implement fallback to other CSRF methods when needed
+
+The X-XSRF-TOKEN provides a convenient and secure way to handle CSRF protection for AJAX requests, especially in single-page applications and modern JavaScript frameworks.
+
 **Example: Manual X-XSRF-TOKEN Usage**
 
 **File:** `resources/js/api.js`
