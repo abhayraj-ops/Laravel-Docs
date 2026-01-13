@@ -21,12 +21,6 @@ The `laravel-8.x` directory contains detailed documentation for Laravel 8.x, cov
 - [CSRF Protection](laravel-8.x/10-csrf.md): How Laravel protects your application from cross-site request forgery attacks.
 - [Controllers](laravel-8.x/11-controllers.md): How to organize your request handling logic using controller classes.
 
-### BOINT-24
-
-The `BOINT-24` directory contains documentation and resources related to the BOINT-24 project:
-
-- [BOINT-24 Overview](BOINT-24/BOINT-24.md): An overview of the BOINT-24 project, including its goals and specifications.
-- [Weekly Reports](BOINT-24/weekly/): Weekly progress reports and updates for the BOINT-24 project.
 
 ## Getting Started
 
