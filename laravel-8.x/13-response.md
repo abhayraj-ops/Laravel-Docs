@@ -297,7 +297,7 @@ Use the Cookie facade to queue cookies for attachment to the response when it's 
 graph TD
     A[Client Request] --> B[Laravel Route]
     B --> C{Queue Cookie for Response}
-    C --> D[Use Cookie::queue()]
+    C --> D["Use Cookie::queue()"]
     D --> E[Store Cookie in Queue]
     E --> F[Process Response]
     F --> G[Attach Queued Cookies]
@@ -368,7 +368,7 @@ Remove cookies using the `withoutCookie()` method or Cookie facade's `expire()` 
 graph TD
     A[Client Request] --> B[Laravel Route]
     B --> C{Remove Cookie}
-    C --> D[Use withoutCookie() or expire()]
+    C --> D["Use withoutCookie() or expire()"]
     D --> E[Set Expiration to Past]
     E --> F[Send Response to Client]
     F --> G[Client Removes Cookie]
@@ -408,7 +408,7 @@ Configure which cookies should not be encrypted in your application's bootstrap 
 graph TD
     A[Application Start] --> B{Configure Cookie Encryption}
     B --> C[Modify bootstrap/app.php]
-    C --> D[Use encryptCookies() Method]
+    C --> D["Use encryptCookies() Method"]
     D --> E[Specify Cookies to Exclude]
     E --> F[Apply Middleware Configuration]
     F --> G[Run Application with Settings]
@@ -472,7 +472,7 @@ Redirect to the user's previous location using the `back()` helper:
 graph TD
     A[Client Request] --> B[Laravel Route]
     B --> C{Validation Failed}
-    C --> D[Use back() Helper]
+    C --> D["Use back() Helper"]
     D --> E[Retrieve Previous URL from Session]
     E --> F[Create RedirectResponse]
     F --> G[Send Redirect to Client]
@@ -497,7 +497,7 @@ Generate redirects to named routes using the `route()` method:
 graph TD
     A[Client Request] --> B[Laravel Route]
     B --> C{Redirect to Named Route}
-    C --> D[Use redirect()->route()]
+    C --> D["Use redirect()->route()"]
     D --> E[Resolve Route Name to URL]
     E --> F[Create RedirectResponse]
     F --> G[Send Redirect to Client]
@@ -569,7 +569,7 @@ Generate redirects to controller actions using the `action()` method:
 graph TD
     A[Client Request] --> B[Laravel Route]
     B --> C{Redirect to Controller Action}
-    C --> D[Use redirect()->action()]
+    C --> D["Use redirect()->action()"]
     D --> E[Resolve Controller and Method to URL]
     E --> F[Create RedirectResponse]
     F --> G[Send Redirect to Client]
@@ -600,7 +600,7 @@ Redirect to external domains using the `away()` method:
 graph TD
     A[Client Request] --> B[Laravel Route]
     B --> C{Redirect to External Domain}
-    C --> D[Use redirect()->away()]
+    C --> D["Use redirect()->away()"]
     D --> E[Create RedirectResponse with External URL]
     E --> F[Send Redirect to Client]
     F --> G[Client Navigates to External Site]
@@ -656,7 +656,7 @@ Flash the current request's input data to the session before redirecting:
 graph TD
     A[Client Request with Data] --> B[Laravel Route]
     B --> C{Validation Failed}
-    C --> D[Use withInput() Method]
+    C --> D["Use withInput() Method"]
     D --> E[Store Input Data in Session]
     E --> F[Create RedirectResponse]
     F --> G[Send Redirect to Client]
@@ -836,21 +836,6 @@ class FileController extends Controller
 ### 7.5 Streamed Responses
 
 Stream data to clients as it's generated to reduce memory usage:
-
-```mermaid
-graph TD
-    A[Client Request] --> B[Laravel Route]
-    B --> C{Stream Response}
-    C --> D[Generate Data Chunk 1]
-    D --> E[Send Chunk to Client]
-    E --> F[Generate Data Chunk 2]
-    F --> G[Send Chunk to Client]
-    G --> H{More Chunks?}
-    H -->|Yes| F
-    H -->|No| I[Complete Response]
-    I --> J[End Connection]
-```
-
 
 ```mermaid
 graph TD
