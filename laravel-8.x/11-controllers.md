@@ -534,6 +534,80 @@ This route definition will define the following routes:
 | PUT/PATCH | /comments/{comment} | update | comments.update |
 | DELETE | /comments/{comment} | destroy | comments.destroy |
 
+## Naming Resource Routes
+
+By default, all resource controller actions have a route name; however, you can override these names by passing a `names` array with your desired route names:
+
+```php
+use App\Http\Controllers\PhotoController;
+
+Route::resource('photos', PhotoController::class)->names([
+    'create' => 'photos.build'
+]);
+```
+
+## Naming Resource Route Parameters
+
+By default, `Route::resource` will create the route parameters for your resource routes based on the "singularized" version of the resource name. You can easily override this on a per resource basis using the `parameters` method. The array passed into the `parameters` method should be an associative array of resource names and parameter names:
+
+```php
+use App\Http\Controllers\AdminUserController;
+
+Route::resource('users', AdminUserController::class)->parameters([
+    'users' => 'admin_user'
+]);
+```
+
+The example above generates the following URI for the resource's show route:
+
+```
+/users/{admin_user}
+```
+
+## Scoping Resource Routes
+
+Laravel's scoped implicit model binding feature can automatically scope nested bindings such that the resolved child model is confirmed to belong to the parent model. By using the `scoped` method when defining your nested resource, you may enable automatic scoping as well as instruct Laravel which field the child resource should be retrieved by:
+
+```php
+use App\Http\Controllers\PhotoCommentController;
+
+Route::resource('photos.comments', PhotoCommentController::class)->scoped([
+    'comment' => 'slug',
+]);
+```
+
+This route will register a scoped nested resource that may be accessed with URIs like the following:
+
+```
+/photos/{photo}/comments/{comment:slug}
+```
+
+When using a custom keyed implicit binding as a nested route parameter, Laravel will automatically scope the query to retrieve the nested model by its parent using conventions to guess the relationship name on the parent. In this case, it will be assumed that the `Photo` model has a relationship named `comments` (the plural of the route parameter name) which can be used to retrieve the `Comment` model.
+
+## Localizing Resource URIs
+
+By default, `Route::resource` will create resource URIs using English verbs and plural rules. If you need to localize the `create` and `edit` action verbs, you may use the `Route::resourceVerbs` method. This may be done at the beginning of the `boot` method within your application's `App\Providers\AppServiceProvider`:
+
+```php
+/**
+ * Bootstrap any application services.
+ */
+public function boot(): void
+{
+    Route::resourceVerbs([
+        'create' => 'crear',
+        'edit' => 'editar',
+    ]);
+}
+```
+
+Laravel's pluralizer supports several different languages which you may configure based on your needs. Once the verbs and pluralization language have been customized, a resource route registration such as `Route::resource('publicacion', PublicacionController::class)` will produce the following URIs:
+
+```
+/publicacion/crear
+/publicacion/{publicaciones}/editar
+```
+
 ## Additional Resources
 
 - [Official Laravel Controller Documentation](https://laravel.com/docs/controllers)
