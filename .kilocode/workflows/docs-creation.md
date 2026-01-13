@@ -123,6 +123,7 @@ steps:
       - Complete, publish-ready documentation
       - Properly formatted markdown file
       - Ready for version control
+      - Commit and push to github.
 
 # Documentation Structure Template
 
