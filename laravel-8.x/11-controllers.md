@@ -284,6 +284,186 @@ Controllers are a fundamental part of Laravel's MVC architecture. They provide a
 - [Requests](12-requests.md) (to be created)
 - [Responses](13-responses.md) (to be created)
 
+## Controller Middleware
+
+Middleware may be assigned to the controller's routes in your route files:
+
+```php
+use App\Http\Controllers\UserController;
+
+Route::get('/profile', [UserController::class, 'show'])->middleware('auth');
+```
+
+Or, you may find it convenient to specify middleware within your controller class. To do so, your controller should implement the `HasMiddleware` interface, which dictates that the controller should have a static `middleware` method. From this method, you may return an array of middleware that should be applied to the controller's actions:
+
+**File**: `app/Http/Controllers/UserController.php`
+
+**Dependencies**:
+- `Illuminate\Routing\Controllers\HasMiddleware`
+- `Illuminate\Routing\Controllers\Middleware`
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+
+class UserController implements HasMiddleware
+{
+    /**
+     * Get the middleware that should be assigned to the controller.
+     *
+     * @return array
+     */
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware('log', only: ['index']),
+            new Middleware('subscribed', except: ['store']),
+        ];
+    }
+
+    // ...
+}
+```
+
+You may also define controller middleware as closures, which provides a convenient way to define an inline middleware without writing an entire middleware class:
+
+```php
+use Closure;
+use Illuminate\Http\Request;
+
+/**
+ * Get the middleware that should be assigned to the controller.
+ *
+ * @return array
+ */
+public static function middleware(): array
+{
+    return [
+        function (Request $request, Closure $next) {
+            return $next($request);
+        },
+    ];
+}
+```
+
+## Resource Controllers
+
+If you think of each Eloquent model in your application as a "resource", it is typical to perform the same sets of actions against each resource in your application. For example, imagine your application contains a `Photo` model and a `Movie` model. It is likely that users can create, read, update, or delete these resources.
+
+Because of this common use case, Laravel resource routing assigns the typical create, read, update, and delete ("CRUD") routes to a controller with a single line of code. To get started, we can use the `make:controller` Artisan command's `--resource` option to quickly create a controller to handle these actions:
+
+```bash
+php artisan make:controller PhotoController --resource
+```
+
+This command will generate a controller at `app/Http/Controllers/PhotoController.php`. The controller will contain a method for each of the available resource operations. Next, you may register a resource route that points to the controller:
+
+```php
+use App\Http\Controllers\PhotoController;
+
+Route::resource('photos', PhotoController::class);
+```
+
+This single route declaration creates multiple routes to handle a variety of actions on the resource. The generated controller will already have methods stubbed for each of these actions. Remember, you can always get a quick overview of your application's routes by running the `route:list` Artisan command.
+
+You may even register many resource controllers at once by passing an array to the `resources` method:
+
+```php
+Route::resources([
+    'photos' => PhotoController::class,
+    'posts' => PostController::class,
+]);
+```
+
+The `softDeletableResources` method registers many resources controllers that all use the `withTrashed` method:
+
+```php
+Route::softDeletableResources([
+    'photos' => PhotoController::class,
+    'posts' => PostController::class,
+]);
+```
+
+### Actions Handled by Resource Controllers
+
+| Verb | URI | Action | Route Name |
+|------|-----|--------|------------|
+| GET | /photos | index | photos.index |
+| GET | /photos/create | create | photos.create |
+| POST | /photos | store | photos.store |
+| GET | /photos/{photo} | show | photos.show |
+| GET | /photos/{photo}/edit | edit | photos.edit |
+| PUT/PATCH | /photos/{photo} | update | photos.update |
+| DELETE | /photos/{photo} | destroy | photos.destroy |
+
+### Customizing Missing Model Behavior
+
+Typically, a 404 HTTP response will be generated if an implicitly bound resource model is not found. However, you may customize this behavior by calling the `missing` method when defining your resource route. The `missing` method accepts a closure that will be invoked if an implicitly bound model cannot be found for any of the resource's routes:
+
+```php
+use App\Http\Controllers\PhotoController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+
+Route::resource('photos', PhotoController::class)
+    ->missing(function (Request $request) {
+        return Redirect::route('photos.index');
+    });
+```
+
+### Soft Deleted Models
+
+Typically, implicit model binding will not retrieve models that have been soft deleted, and will instead return a 404 HTTP response. However, you can instruct the framework to allow soft deleted models by invoking the `withTrashed` method when defining your resource route:
+
+```php
+use App\Http\Controllers\PhotoController;
+
+Route::resource('photos', PhotoController::class)->withTrashed();
+```
+
+Calling `withTrashed` with no arguments will allow soft deleted models for the `show`, `edit`, and `update` resource routes. You may specify a subset of these routes by passing an array to the `withTrashed` method:
+
+```php
+Route::resource('photos', PhotoController::class)->withTrashed(['show']);
+```
+
+### Specifying the Resource Model
+
+If you are using route model binding and would like the resource controller's methods to type-hint a model instance, you may use the `--model` option when generating the controller:
+
+```bash
+php artisan make:controller PhotoController --model=Photo --resource
+```
+
+### Generating Form Requests
+
+You may provide the `--requests` option when generating a resource controller to instruct Artisan to generate form request classes for the controller's storage and update methods:
+
+```bash
+php artisan make:controller PhotoController --model=Photo --resource --requests
+```
+
+## Partial Resource Routes
+
+When declaring a resource route, you may specify a subset of actions the controller should handle instead of the full set of default actions:
+
+```php
+use App\Http\Controllers\PhotoController;
+
+Route::resource('photos', PhotoController::class)->only([
+    'index', 'show'
+]);
+
+Route::resource('photos', PhotoController::class)->except([
+    'create', 'store', 'update', 'destroy'
+]);
+```
+
 ## Additional Resources
 
 - [Official Laravel Controller Documentation](https://laravel.com/docs/controllers)
