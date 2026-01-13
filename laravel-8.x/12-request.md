@@ -579,132 +579,123 @@ graph TD
 
 ```mermaid
 graph TD
-    A[Incoming HTTP Request] --> B[Laravel Service Container]
-    B --> C{Route Closure/Controller Method}
-    C --> D[Dependency Injection]
-    D --> E[Request Instance Injected]
-    E --> F[Access Request Methods]
-    style C fill:#e1f5fe
+    A["Incoming HTTP Request"] --> B["Laravel Service Container"]
+    B --> C{"Route Closure/Controller Method"}
+    C --> D["Dependency Injection"]
+    D --> E["Request Instance Injected"]
+    E --> F["Access Request Methods"]
 ```
 
 ### 2.1 Request Path, Host, and Method Visualization
 
 ```mermaid
 graph TD
-    A[HTTP Request] --> B[Request Instance]
-    B --> C[Path Methods]
-    B --> D[Host Methods]
-    B --> E[Method Methods]
-    C --> F[path(), is(), routeIs()]
-    D --> G[host(), httpHost(), schemeAndHttpHost()]
-    E --> H[method(), isMethod()]
-    style B fill:#e1f5fe
+    A["HTTP Request"] --> B["Request Instance"]
+    B --> C["Path Methods"]
+    B --> D["Host Methods"]
+    B --> E["Method Methods"]
+    C --> F["path(), is(), routeIs()"]
+    D --> G["host(), httpHost(), schemeAndHttpHost()"]
+    E --> H["method(), isMethod()"]
 ```
 
 ### 3.1 Request Headers Visualization
 
 ```mermaid
 graph TD
-    A[HTTP Request] --> B[Request Instance]
-    B --> C[Header Methods]
-    C --> D[header()]
-    C --> E[hasHeader()]
-    C --> F[bearerToken()]
-    D --> G[Get Specific Header]
-    E --> H[Check Header Existence]
-    F --> I[Get Bearer Token]
-    style B fill:#e1f5fe
+    A["HTTP Request"] --> B["Request Instance"]
+    B --> C["Header Methods"]
+    C --> D["header()"]
+    C --> E["hasHeader()"]
+    C --> F["bearerToken()"]
+    D --> G["Get Specific Header"]
+    E --> H["Check Header Existence"]
+    F --> I["Get Bearer Token"]
 ```
 
 ### 4.1 Request IP Address Visualization
 
 ```mermaid
 graph TD
-    A[HTTP Request] --> B[Request Instance]
-    B --> C[IP Methods]
-    C --> D[ip()]
-    C --> E[ips()]
-    D --> F[Single IP Address]
-    E --> G[Array of IP Addresses]
-    style B fill:#e1f5fe
+    A["HTTP Request"] --> B["Request Instance"]
+    B --> C["IP Methods"]
+    C --> D["ip()"]
+    C --> E["ips()"]
+    D --> F["Single IP Address"]
+    E --> G["Array of IP Addresses"]
 ```
 
 ### 5.1 Content Negotiation Visualization
 
 ```mermaid
 graph TD
-    A[HTTP Request] --> B[Request Instance]
-    B --> C[Content Negotiation Methods]
-    C --> D[getAcceptableContentTypes()]
-    C --> E[accepts()]
-    C --> F[prefers()]
-    C --> G[expectsJson()]
-    D --> H[All Accepted Types]
-    E --> I[Check Specific Types]
-    F --> J[Preferred Type]
-    G --> K[JSON Expected?]
-    style B fill:#e1f5fe
+    A["HTTP Request"] --> B["Request Instance"]
+    B --> C["Content Negotiation Methods"]
+    C --> D["getAcceptableContentTypes()"]
+    C --> E["accepts()"]
+    C --> F["prefers()"]
+    C --> G["expectsJson()"]
+    D --> H["All Accepted Types"]
+    E --> I["Check Specific Types"]
+    F --> J["Preferred Type"]
+    G --> K["JSON Expected?"]
 ```
 
 ### 7.1 Input Methods Visualization
 
 ```mermaid
 graph TD
-    A[HTTP Request] --> B[Request Instance]
-    B --> C[Input Methods]
-    C --> D[All Input]
-    C --> E[Specific Input]
-    C --> F[Query String]
-    C --> G[JSON Input]
-    C --> H[Dynamic Properties]
-    D --> I[all(), collect()]
-    E --> J[input()]
-    F --> K[query()]
-    G --> L[JSON dot notation]
-    H --> M[$request->property]
-    style B fill:#e1f5fe
+    A["HTTP Request"] --> B["Request Instance"]
+    B --> C["Input Methods"]
+    C --> D["All Input"]
+    C --> E["Specific Input"]
+    C --> F["Query String"]
+    C --> G["JSON Input"]
+    C --> H["Dynamic Properties"]
+    D --> I["all(), collect()"]
+    E --> J["input()"]
+    F --> K["query()"]
+    G --> L["JSON dot notation"]
+    H --> M["$request->property"]
 ```
 
 ### 8.1 Input Presence Visualization
 
 ```mermaid
 graph TD
-    A[HTTP Request] --> B[Request Instance]
-    B --> C[Presence Methods]
-    C --> D[has()]
-    C --> E[filled()]
-    C --> F[missing()]
-    D --> G[Value Present?]
-    E --> H[Value Filled?]
-    F --> I[Value Missing?]
-    style B fill:#e1f5fe
+    A["HTTP Request"] --> B["Request Instance"]
+    B --> C["Presence Methods"]
+    C --> D["has()"]
+    C --> E["filled()"]
+    C --> F["missing()"]
+    D --> G["Value Present?"]
+    E --> H["Value Filled?"]
+    F --> I["Value Missing?"]
 ```
 
 ### 10.1 Old Input Visualization
 
 ```mermaid
 graph TD
-    A[Form Submission] --> B[Validation Fails]
-    B --> C[Flash Input to Session]
-    C --> D[Redirect Back]
-    D --> E[Retrieve Old Input]
-    E --> F[Repopulate Form]
-    style B fill:#e1f5fe
+    A["Form Submission"] --> B["Validation Fails"]
+    B --> C["Flash Input to Session"]
+    C --> D["Redirect Back"]
+    D --> E["Retrieve Old Input"]
+    E --> F["Repopulate Form"]
 ```
 
 ### 13.1 Files Visualization
 
 ```mermaid
 graph TD
-    A[File Upload Request] --> B[Request Instance]
-    B --> C[File Methods]
-    C --> D[Retrieve File]
-    C --> E[Validate File]
-    C --> F[Store File]
-    D --> G[file(), photo property]
-    E --> H[isValid()]
-    F --> I[store(), storeAs()]
-    style B fill:#e1f5fe
+    A["File Upload Request"] --> B["Request Instance"]
+    B --> C["File Methods"]
+    C --> D["Retrieve File"]
+    C --> E["Validate File"]
+    C --> F["Store File"]
+    D --> G["file(), photo property"]
+    E --> H["isValid()"]
+    F --> I["store(), storeAs()"]
 ```
 
 ## Conclusion
