@@ -608,6 +608,92 @@ Laravel's pluralizer supports several different languages which you may configur
 /publicacion/{publicaciones}/editar
 ```
 
+## Supplementing Resource Controllers
+
+If you need to add additional routes to a resource controller beyond the default set of resource routes, you should define those routes before your call to the `Route::resource` method; otherwise, the routes defined by the resource method may unintentionally take precedence over your supplemental routes:
+
+```php
+use App\Http\Controller\PhotoController;
+
+Route::get('/photos/popular', [PhotoController::class, 'popular']);
+
+Route::resource('photos', PhotoController::class);
+```
+
+Remember to keep your controllers focused. If you find yourself routinely needing methods outside of the typical set of resource actions, consider splitting your controller into two, smaller controllers.
+
+## Singleton Resource Controllers
+
+Sometimes, your application will have resources that may only have a single instance. For example, a user's "profile" can be edited or updated, but a user may not have more than one "profile". Likewise, an image may have a single "thumbnail". These resources are called "singleton resources", meaning one and only one instance of the resource may exist. In these scenarios, you may register a "singleton" resource controller:
+
+```php
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+
+Route::singleton('profile', ProfileController::class);
+```
+
+The singleton resource definition above will register the following routes. As you can see, "creation" routes are not registered for singleton resources, and the registered routes do not accept an identifier since only one instance of the resource may exist:
+
+| Verb | URI | Action | Route Name |
+|------|-----|--------|------------|
+| GET | /profile | show | profile.show |
+| GET | /profile/edit | edit | profile.edit |
+| PUT/PATCH | /profile | update | profile.update |
+
+Singleton resources may also be nested within a standard resource:
+
+```php
+Route::singleton('photos.thumbnail', ThumbnailController::class);
+```
+
+In this example, the photos resource would receive all of the standard resource routes; however, the thumbnail resource would be a singleton resource with the following routes:
+
+| Verb | URI | Action | Route Name |
+|------|-----|--------|------------|
+| GET | /photos/{photo}/thumbnail | show | photos.thumbnail.show |
+| GET | /photos/{photo}/thumbnail/edit | edit | photos.thumbnail.edit |
+| PUT/PATCH | /photos/{photo}/thumbnail | update | photos.thumbnail.update |
+
+### Creatable Singleton Resources
+
+Occasionally, you may want to define creation and storage routes for a singleton resource. To accomplish this, you may invoke the `creatable` method when registering the singleton resource route:
+
+```php
+Route::singleton('photos.thumbnail', ThumbnailController::class)->creatable();
+```
+
+In this example, the following routes will be registered. As you can see, a DELETE route will also be registered for creatable singleton resources:
+
+| Verb | URI | Action | Route Name |
+|------|-----|--------|------------|
+| GET | /photos/{photo}/thumbnail/create | create | photos.thumbnail.create |
+| POST | /photos/{photo}/thumbnail | store | photos.thumbnail.store |
+| GET | /photos/{photo}/thumbnail | show | photos.thumbnail.show |
+| GET | /photos/{photo}/thumbnail/edit | edit | photos.thumbnail.edit |
+| PUT/PATCH | /photos/{photo}/thumbnail | update | photos.thumbnail.update |
+| DELETE | /photos/{photo}/thumbnail | destroy | photos.thumbnail.destroy |
+
+If you would like Laravel to register the DELETE route for a singleton resource but not register the creation or storage routes, you may utilize the `destroyable` method:
+
+```php
+Route::singleton(...)->destroyable();
+```
+
+### API Singleton Resources
+
+The `apiSingleton` method may be used to register a singleton resource that will be manipulated via an API, thus rendering the create and edit routes unnecessary:
+
+```php
+Route::apiSingleton('profile', ProfileController::class);
+```
+
+Of course, API singleton resources may also be creatable, which will register store and destroy routes for the resource:
+
+```php
+Route::apiSingleton('photos.thumbnail', ProfileController::class)->creatable();
+```
+
 ## Additional Resources
 
 - [Official Laravel Controller Documentation](https://laravel.com/docs/controllers)
