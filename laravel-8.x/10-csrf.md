@@ -93,6 +93,82 @@ graph TD
 
 The `Illuminate\Foundation\Http\Middleware\ValidateCsrfToken` middleware, which is included in the web middleware group by default, will automatically verify that the token in the request input matches the token stored in the session. When these two tokens match, we know that the authenticated user is the one initiating the request.
 
+
+### Why Malicious Attackers Can't Access the Token
+
+```mermaid
+sequenceDiagram
+    participant MaliciousSite
+    participant UserBrowser
+    participant YourApp
+    participant UserSession
+
+    MaliciousSite->>UserBrowser: Try to load form from your app
+    UserBrowser->>YourApp: GET request (no session)
+    YourApp->>UserSession: Generate token for this session
+    UserSession-->>YourApp: Token stored in session
+    YourApp-->>UserBrowser: HTML with token
+
+    Note over MaliciousSite,UserBrowser: Malicious site cannot read the token because:
+    Note over MaliciousSite,UserBrowser: 1. Same-Origin Policy prevents reading responses
+    Note over MaliciousSite,UserBrowser: 2. Token is embedded in HTML, not exposed in URL
+    Note over MaliciousSite,UserBrowser: 3. Session is server-side, not accessible to other domains
+
+    MaliciousSite->>UserBrowser: Try to submit form without token
+    UserBrowser->>YourApp: POST without valid token
+    YourApp->>UserSession: Verify token
+    UserSession-->>YourApp: Token missing/invalid
+    YourApp-->>UserBrowser: 419 Error - Token Mismatch
+```
+
+### Why Legitimate Users Can Access the Token
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UserBrowser
+    participant YourApp
+    participant UserSession
+
+    User->>UserBrowser: Visit your application
+    UserBrowser->>YourApp: GET /form-page (with cookies)
+    YourApp->>UserSession: Generate/Retrieve token
+    UserSession-->>YourApp: Token from session
+    YourApp-->>UserBrowser: HTML with embedded token
+
+    Note over UserBrowser: User's browser receives HTML with:
+    Note over UserBrowser: 1. Hidden input field with token
+    Note over UserBrowser: 2. Or meta tag with token
+    Note over UserBrowser: 3. Or XSRF-TOKEN cookie
+
+    User->>UserBrowser: Submit form
+    UserBrowser->>YourApp: POST with token (from form/meta/cookie)
+    YourApp->>UserSession: Verify token matches
+    UserSession-->>YourApp: Token valid
+    YourApp->>YourApp: Process request
+    YourApp-->>UserBrowser: Success response
+```
+
+### Key Security Mechanisms
+
+```mermaid
+graph TD
+    A[CSRF Token Lifecycle] --> B[Generated on Server]
+    B --> C[Stored in User Session]
+    C --> D[Embedded in HTML Response]
+    D --> E[User's Browser Receives Token]
+
+    E --> F[Token Included in Form Submission]
+    F --> G[Server Validates Token]
+    G -->|Match| H[Request Processed]
+    G -->|No Match| I[Request Rejected]
+
+    J[Malicious Site] -->|Cannot Access| C
+    J -->|Cannot Read| D
+    J -->|Cannot Steal| E
+```
+
+
 ## CSRF Tokens & SPAs
 
 If you are building an SPA that is utilizing Laravel as an API backend, you should consult the Laravel Sanctum documentation for information on authenticating with your API and protecting against CSRF vulnerabilities.
