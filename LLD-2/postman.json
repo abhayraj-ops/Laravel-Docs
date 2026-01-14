@@ -1,0 +1,460 @@
+{
+  "info": {
+    "name": "Laravel Routing Fundamentals - LLD-02 Tests",
+    "description": "Comprehensive test suite for Laravel routing fundamentals project covering all required routes and functionality",
+    "_postman_id": "laravel-routing-fundamentals-ll-d-02-tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Basic Routes",
+      "item": [
+        {
+          "name": "GET /welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/welcome",
+              "host": ["{{base_url}}"],
+              "path": ["welcome"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Test User\", \"email\": \"test@example.com\", \"age\": 25}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /users/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Updated User\", \"email\": \"updated@example.com\", \"age\": 26}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /users/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Route Parameters",
+      "item": [
+        {
+          "name": "GET /users/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /posts/{post}/comments/{comment}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1/comments/1",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "1", "comments", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /users/{name?}", 
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /users/{name?} with name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/John",
+              "host": ["{{base_url}}"],
+              "path": ["users", "John"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /users/{id} with numeric constraint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /users/{id}/{name} with constraints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1/John",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1", "John"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Named Routes",
+      "item": [
+        {
+          "name": "GET /users/profile (named route)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /redirect-profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/redirect-profile",
+              "host": ["{{base_url}}"],
+              "path": ["redirect-profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /profile-url",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/profile-url",
+              "host": ["{{base_url}}"],
+              "path": ["profile-url"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Route Groups",
+      "item": [
+        {
+          "name": "Admin Group - GET /admin/users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Group - GET /admin/posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/posts",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "posts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Authentication Group - GET /dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Authentication Group - GET /settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings",
+              "host": ["{{base_url}}"],
+              "path": ["settings"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "API Endpoints",
+      "item": [
+        {
+          "name": "GET /api/users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"API User\", \"email\": \"api@example.com\", \"age\": 30}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/users/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Updated API User\", \"email\": \"updatedapi@example.com\", \"age\": 31}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/users/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/users/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Middleware Tests",
+      "item": [
+        {
+          "name": "GET /adult-content (without age)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/adult-content",
+              "host": ["{{base_url}}"],
+              "path": ["adult-content"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /adult-content (with valid age)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Age",
+                "value": "25"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/adult-content",
+              "host": ["{{base_url}}"],
+              "path": ["adult-content"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /adult-content (with invalid age)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Age",
+                "value": "18"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/adult-content",
+              "host": ["{{base_url}}"],
+              "path": ["adult-content"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /adult-content (with valid age in body)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "age",
+                  "value": "25",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/adult-content",
+              "host": ["{{base_url}}"],
+              "path": ["adult-content"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "id": "base_url",
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}
