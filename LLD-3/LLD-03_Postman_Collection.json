@@ -1,0 +1,1202 @@
+{
+  "info": {
+    "name": "LLD-03: Laravel Controllers Test Suite",
+    "description": "Comprehensive test suite for Laravel Controllers project covering all required routes, CRUD operations, and API endpoints",
+    "_postman_id": "laravel-controllers-ll-d-03-tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "UserController Endpoints",
+      "item": [
+        {
+          "name": "GET /users - Display all users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get dashboard (auth middleware)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/dashboard",
+                  "host": ["{{base_url}}"],
+                  "path": ["dashboard"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Dashboard</title>\n</head>\n<body>\n    <h1>Dashboard</h1>\n    <p>Welcome to your dashboard!</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /users/create - Show user creation form",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/create",
+              "host": ["{{base_url}}"],
+              "path": ["users", "create"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get users with auth middleware",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Users</title>\n</head>\n<body>\n    <h1>All Users</h1>\n    <table>\n        <thead>\n            <tr>\n                <th>ID</th>\n                <th>Name</th>\n                <th>Email</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td>1</td>\n                <td>Test User</td>\n                <td>test@example.com</td>\n            </tr>\n        </tbody>\n    </table>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "POST /users - Create new user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": [
+            {
+              "name": "Update specific post via API",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Updated API Post Title\",\n  \"content\": \"This is the updated content of the API post.\",\n  \"user_id\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/posts/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "posts", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Post updated successfully\",\n  \"post\": {\n    \"id\": 1,\n    \"title\": \"Updated API Post Title\",\n    \"content\": \"This is the updated content of the API post.\",\n    \"user_id\": 1,\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /users/{id} - Display specific user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Create new post via API",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"API Post Title\",\n  \"content\": \"This is the content of the API post.\",\n  \"user_id\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/posts",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "posts"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Post created successfully\",\n  \"post\": {\n    \"id\": 2,\n    \"title\": \"API Post Title\",\n    \"content\": \"This is the content of the API post.\",\n    \"user_id\": 1,\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /users/{id}/edit - Show user edit form",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1/edit",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1", "edit"]
+            }
+          },
+          "response": [
+            {
+              "name": "Delete specific user via API",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "1"]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT /users/{id} - Update specific user",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated User\",\n  \"email\": \"updated@example.com\",\n  \"password\": \"newpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get specific user via API",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /users/{id} - Delete specific user",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Create new user via API",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"API User\",\n  \"email\": \"api@example.com\",\n  \"password\": \"apipassword\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User created successfully\",\n  \"user\": {\n    \"id\": 2,\n    \"name\": \"API User\",\n    \"email\": \"api@example.com\",\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PostController Endpoints (Resource)",
+      "item": [
+        {
+          "name": "GET /posts - Display all posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts",
+              "host": ["{{base_url}}"],
+              "path": ["posts"]
+            }
+          },
+          "response": [
+            {
+              "name": "Update specific post",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Updated Post Title\",\n  \"content\": \"This is the updated content of the post.\",\n  \"user_id\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/posts/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["posts", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Post updated successfully\",\n  \"post\": {\n    \"id\": 1,\n    \"title\": \"Updated Post Title\",\n    \"content\": \"This is the updated content of the post.\",\n    \"user_id\": 1,\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /posts/create - Show post creation form",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/create",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "create"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get specific post",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/posts/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["posts", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Post Details</title>\n</head>\n<body>\n    <h1>Post Details</h1>\n    <p><strong>ID:</strong> 1</p>\n    <p><strong>Title:</strong> Sample Post</p>\n    <p><strong>Content:</strong> This is a sample post content.</p>\n    <p><strong>Author ID:</strong> 1</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "POST /posts - Create new post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New Post Title\",\n  \"content\": \"This is the content of the new post.\",\n  \"user_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/posts",
+              "host": ["{{base_url}}"],
+              "path": ["posts"]
+            }
+          },
+          "response": [
+            {
+              "name": "Show post creation form",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/posts/create",
+                  "host": ["{{base_url}}"],
+                  "path": ["posts", "create"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Create Post</title>\n</head>\n<body>\n    <h1>Create New Post</h1>\n    <form method=\"POST\" action=\"/posts\">\n        <input type=\"hidden\" name=\"_token\" value=\"dummy_token\">\n        <div>\n            <label>Title:</label>\n            <input type=\"text\" name=\"title\" required>\n        </div>\n        <div>\n            <label>Content:</label>\n            <textarea name=\"content\" required></textarea>\n        </div>\n        <div>\n            <label>Author ID:</label>\n            <input type=\"number\" name=\"user_id\" required>\n        </div>\n        <button type=\"submit\">Create Post</button>\n    </form>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /posts/{id} - Display specific post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get all posts",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/posts",
+                  "host": ["{{base_url}}"],
+                  "path": ["posts"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Posts</title>\n</head>\n<body>\n    <h1>All Posts</h1>\n    <table>\n        <thead>\n            <tr>\n                <th>ID</th>\n                <th>Title</th>\n                <th>Content</th>\n                <th>Author</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr>\n                <td>1</td>\n                <td>Sample Post</td>\n                <td>This is a sample post content.</td>\n                <td>Test User</td>\n            </tr>\n        </tbody>\n    </table>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /posts/{id}/edit - Show post edit form",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1/edit",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "1", "edit"]
+            }
+          },
+          "response": [
+            {
+              "name": "Update specific user",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated User\",\n \"email\": \"updated@example.com\",\n  \"password\": \"newpassword\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User updated successfully\",\n  \"user\": {\n    \"id\": 1,\n    \"name\": \"Updated User\",\n    \"email\": \"updated@example.com\",\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT /posts/{id} - Update specific post",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Post Title\",\n  \"content\": \"This is the updated content of the post.\",\n  \"user_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/posts/1",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get specific user",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>User Details</title>\n</head>\n<body>\n    <h1>User Details</h1>\n    <p><strong>ID:</strong> 1</p>\n    <p><strong>Name:</strong> Test User</p>\n    <p><strong>Email:</strong> test@example.com</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /posts/{id} - Delete specific post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Show user creation form",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/create",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "create"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Create User</title>\n</head>\n<body>\n    <h1>Create New User</h1>\n    <form method=\"POST\" action=\"/users\">\n        <input type=\"hidden\" name=\"_token\" value=\"dummy_token\">\n        <div>\n            <label>Name:</label>\n            <input type=\"text\" name=\"name\" required>\n        </div>\n        <div>\n            <label>Email:</label>\n            <input type=\"email\" name=\"email\" required>\n        </div>\n        <div>\n            <label>Password:</label>\n            <input type=\"password\" name=\"password\" required>\n        </div>\n        <button type=\"submit\">Create User</button>\n    </form>\n</body>\n</html>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "API User Endpoints",
+      "item": [
+        {
+          "name": "GET /api/users - Retrieve all users via API",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          },
+         "response": [
+           {
+             "name": "Get all users via API",
+             "originalRequest": {
+               "method": "GET",
+               "header": [
+                 {
+                   "key": "Accept",
+                   "value": "application/json"
+                 }
+               ],
+               "url": {
+                 "raw": "{{base_url}}/api/users",
+                 "host": ["{{base_url}}"],
+                 "path": ["api", "users"]
+               }
+             },
+             "status": "OK",
+             "code": 200,
+             "header": [
+               {
+                 "key": "Content-Type",
+                 "value": "application/json"
+               }
+             ],
+             "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Test User\",\n      \"email\": \"test@example.com\",\n      \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n      \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n    }\n  ],\n  \"links\": {\n    \"first\": \"{{base_url}}/api/users?page=1\",\n    \"last\": \"{{base_url}}/api/users?page=1\",\n    \"prev\": null,\n    \"next\": null\n  },\n  \"meta\": {\n    \"current_page\": 1,\n    \"from\": 1,\n    \"last_page\": 1,\n    \"links\": [\n      {\n        \"url\": null,\n        \"label\": \"&laquo; Previous\",\n        \"active\": false\n      },\n      {\n        \"url\": \"{{base_url}}/api/users?page=1\",\n        \"label\": \"1\",\n        \"active\": true\n      },\n      {\n        \"url\": null,\n        \"label\": \"Next &raquo;\",\n        \"active\": false\n      }\n    ],\n    \"path\": \"{{base_url}}/api/users\",\n    \"per_page\": 15,\n    \"to\": 1,\n    \"total\": 1\n  }\n}"
+           }
+         ]
+        },
+        {
+          "name": "POST /api/users - Create new user via API",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"API User\",\n  \"email\": \"api@example.com\",\n  \"password\": \"apipassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          },
+          "response": [
+            {
+              "name": "Create new user",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test User\",\n \"email\": \"test@example.com\",\n  \"password\": \"password\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["users"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User created successfully\",\n \"user\": {\n    \"id\": 2,\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /api/users/{id} - Retrieve specific user via API",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Show user edit form",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/1/edit",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1", "edit"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Edit User</title>\n</head>\n<body>\n    <h1>Edit User</h1>\n    <form method=\"POST\" action=\"/users/1\">\n        <input type=\"hidden\" name=\"_token\" value=\"dummy_token\">\n        <input type=\"hidden\" name=\"_method\" value=\"PUT\">\n        <div>\n            <label>Name:</label>\n            <input type=\"text\" name=\"name\" value=\"Test User\" required>\n        </div>\n        <div>\n            <label>Email:</label>\n            <input type=\"email\" name=\"email\" value=\"test@example.com\" required>\n        </div>\n        <div>\n            <label>Password:</label>\n            <input type=\"password\" name=\"password\">\n        </div>\n        <button type=\"submit\">Update User</button>\n    </form>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/users/{id} - Update specific user via API",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated API User\",\n  \"email\": \"updatedapi@example.com\",\n  \"password\": \"newapipassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Delete specific user",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1"]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/users/{id} - Delete specific user via API",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Create new post",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"New Post Title\",\n  \"content\": \"This is the content of the new post.\",\n  \"user_id\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/posts",
+                  "host": ["{{base_url}}"],
+                  "path": ["posts"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Post created successfully\",\n  \"post\": {\n    \"id\": 2,\n    \"title\": \"New Post Title\",\n    \"content\": \"This is the content of the new post.\",\n    \"user_id\": 1,\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "API Post Endpoints",
+      "item": [
+        {
+          "name": "GET /api/posts - Retrieve all posts via API",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/posts",
+              "host": ["{{base_url}}"],
+              "path": ["api", "posts"]
+            }
+          },
+          "response": [
+            {
+              "name": "Show post edit form",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/posts/1/edit",
+                  "host": ["{{base_url}}"],
+                  "path": ["posts", "1", "edit"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Edit Post</title>\n</head>\n<body>\n    <h1>Edit Post</h1>\n    <form method=\"POST\" action=\"/posts/1\">\n        <input type=\"hidden\" name=\"_token\" value=\"dummy_token\">\n        <input type=\"hidden\" name=\"_method\" value=\"PUT\">\n        <div>\n            <label>Title:</label>\n            <input type=\"text\" name=\"title\" value=\"Sample Post\" required>\n        </div>\n        <div>\n            <label>Content:</label>\n            <textarea name=\"content\" required>\"This is a sample post content.\"</textarea>\n        </div>\n        <div>\n            <label>Author ID:</label>\n            <input type=\"number\" name=\"user_id\" value=\"1\" required>\n        </div>\n        <button type=\"submit\">Update Post</button>\n    </form>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "POST /api/posts - Create new post via API",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"API Post Title\",\n  \"content\": \"This is the content of the API post.\",\n  \"user_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/posts",
+              "host": ["{{base_url}}"],
+              "path": ["api", "posts"]
+            }
+          },
+          "response": [
+            {
+              "name": "Delete specific post",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/posts/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["posts", "1"]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Post deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /api/posts/{id} - Retrieve specific post via API",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/posts/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "posts", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Update specific user via API",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated API User\",\n  \"email\": \"updatedapi@example.com\",\n  \"password\": \"newapipassword\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User updated successfully\",\n  \"user\": {\n    \"id\": 1,\n    \"name\": \"Updated API User\",\n    \"email\": \"updatedapi@example.com\",\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/posts/{id} - Update specific post via API",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated API Post Title\",\n  \"content\": \"This is the updated content of the API post.\",\n  \"user_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/posts/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "posts", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get all posts via API",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/posts",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "posts"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"title\": \"Sample Post\",\n      \"content\": \"This is a sample post content.\",\n      \"user_id\": 1,\n      \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n      \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n    }\n  ],\n  \"links\": {\n    \"first\": \"{{base_url}}/api/posts?page=1\",\n    \"last\": \"{{base_url}}/api/posts?page=1\",\n    \"prev\": null,\n    \"next\": null\n  },\n  \"meta\": {\n    \"current_page\": 1,\n    \"from\": 1,\n    \"last_page\": 1,\n    \"links\": [\n      {\n        \"url\": null,\n        \"label\": \"&laquo; Previous\",\n        \"active\": false\n      },\n      {\n        \"url\": \"{{base_url}}/api/posts?page=1\",\n        \"label\": \"1\",\n        \"active\": true\n      },\n      {\n        \"url\": null,\n        \"label\": \"Next &raquo;\",\n        \"active\": false\n      }\n    ],\n    \"path\": \"{{base_url}}/api/posts\",\n    \"per_page\": 15,\n    \"to\": 1,\n    \"total\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/posts/{id} - Delete specific post via API",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/posts/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "posts", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get specific post via API",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/posts/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "posts", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 1,\n    \"title\": \"Sample Post\",\n    \"content\": \"This is a sample post content.\",\n    \"user_id\": 1,\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Middleware Tests",
+      "item": [
+        {
+          "name": "GET /users (authenticated route)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": [
+            {
+              "name": "Delete specific post via API",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/posts/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "posts", "1"]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Post deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /login (guest route)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            }
+          },
+          "response": [
+            {
+              "name": "Get login page (guest route)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/login",
+                  "host": ["{{base_url}}"],
+                  "path": ["login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Login</title>\n</head>\n<body>\n    <h1>Login</h1>\n    <form method=\"POST\" action=\"/login\">\n        <input type=\"hidden\" name=\"_token\" value=\"dummy_token\">\n        <div>\n            <label>Email:</label>\n            <input type=\"email\" name=\"email\" required>\n        </div>\n        <div>\n            <label>Password:</label>\n            <input type=\"password\" name=\"password\" required>\n        </div>\n        <button type=\"submit\">Login</button>\n    </form>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /dashboard (auth middleware)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "id": "base_url",
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}
