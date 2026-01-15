@@ -1,0 +1,1119 @@
+{
+  "info": {
+    "name": "Laravel Routing Fundamentals - LLD-02 Tests",
+    "description": "Comprehensive test suite for Laravel routing fundamentals project covering all required routes and functionality",
+    "_postman_id": "laravel-routing-fundamentals-ll-d-02-tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Basic Routes",
+      "item": [
+        {
+          "name": "GET /welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/welcome",
+              "host": ["{{base_url}}"],
+              "path": ["welcome"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /adult-content (with invalid age) response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Age",
+                    "value": "18"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/adult-content",
+                  "host": ["{{base_url}}"],
+                  "path": ["adult-content"]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Access Denied</title>\n</head>\n<body>\n    <h1>Access Denied</h1>\n    <p>You must be at least 21 years old to access this content. You are only 18 years old.</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /adult-content (with valid age) response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Age",
+                    "value": "25"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/adult-content",
+                  "host": ["{{base_url}}"],
+                  "path": ["adult-content"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Adult Content</title>\n</head>\n<body>\n    <h1>Adult Content</h1>\n    <p>You are 25 years old and can access this content.</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "POST /users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Test User\", \"email\": \"test@example.com\", \"age\": 25}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /api/users/{id} response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"age\": 25,\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PUT /users/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Updated User\", \"email\": \"updated@example.com\", \"age\": 26}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "POST /api/users response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"API User\", \"email\": \"api@example.com\", \"age\": 30}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User created successfully\",\n  \"user\": {\n    \"id\": 2,\n    \"name\": \"API User\",\n    \"email\": \"api@example.com\",\n    \"age\": 30,\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /users/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /api/users response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Test User\",\n      \"email\": \"test@example.com\",\n      \"age\": 25,\n      \"created_at\": \"2023-01-01T12:00:00.000000Z\",\n      \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n    }\n  ],\n  \"links\": {\n    \"first\": \"{{base_url}}/api/users?page=1\",\n    \"last\": \"{{base_url}}/api/users?page=1\",\n    \"prev\": null,\n    \"next\": null\n  },\n  \"meta\": {\n    \"current_page\": 1,\n    \"from\": 1,\n    \"last_page\": 1,\n    \"links\": [\n      {\n        \"url\": null,\n        \"label\": \"&laquo; Previous\",\n        \"active\": false\n      },\n      {\n        \"url\": \"{{base_url}}/api/users?page=1\",\n        \"label\": \"1\",\n        \"active\": true\n      },\n      {\n        \"url\": null,\n        \"label\": \"Next &raquo;\",\n        \"active\": false\n      }\n    ],\n    \"path\": \"{{base_url}}/api/users\",\n    \"per_page\": 15,\n    \"to\": 1,\n    \"total\": 1\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Route Parameters",
+      "item": [
+        {
+          "name": "GET /users/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Admin Group - GET /admin/posts response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/admin/posts",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "posts"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Admin Posts</title>\n</head>\n<body>\n    <h1>Admin Posts Dashboard</h1>\n    <p>This is the admin posts page.</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /posts/{post}/comments/{comment}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/1/comments/1",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "1", "comments", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /profile-url response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/profile-url",
+                  "host": ["{{base_url}}"],
+                  "path": ["profile-url"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Profile URL</title>\n</head>\n<body>\n    <h1>Generated Profile URL</h1>\n    <p>The URL for the profile route is: {{base_url}}/users/profile</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /users/{name?}", 
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /redirect-profile response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/redirect-profile",
+                  "host": ["{{base_url}}"],
+                  "path": ["redirect-profile"]
+                }
+              },
+              "status": "Found",
+              "code": 302,
+              "header": [
+                {
+                  "key": "Location",
+                  "value": "{{base_url}}/users/profile"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <meta http-equiv=\"refresh\" content=\"0; url={{base_url}}/users/profile\">\n    <title>Redirecting...</title>\n</head>\n<body>\n    <p>Redirecting to <a href=\"{{base_url}}/users/profile\">profile</a>...</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /users/{name?} with name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/John",
+              "host": ["{{base_url}}"],
+              "path": ["users", "John"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /users/{id}/{name} with constraints response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/1/John",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1", "John"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>User Details</title>\n</head>\n<body>\n    <h1>User Details</h1>\n    <p>ID: 1</p>\n    <p>Name: John</p>\n    <p>This route validates that ID is numeric and name is alphabetic.</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /users/{id} with numeric constraint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /users/{id} with numeric constraint response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 20,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>User Details</title>\n</head>\n<body>\n    <h1>User Details</h1>\n    <p>ID: 1</p>\n    <p>This route only accepts numeric IDs.</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /users/{id}/{name} with constraints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1/John",
+              "host": ["{{base_url}}"],
+              "path": ["users", "1", "John"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /users/{name?} response (no name)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Users</title>\n</head>\n<body>\n    <h1>All Users</h1>\n    <p>No specific user name provided.</p>\n</body>\n</html>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Named Routes",
+      "item": [
+        {
+          "name": "GET /users/profile (named route)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /users/{id} response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>User Details</title>\n</head>\n<body>\n    <h1>User Details</h1>\n    <p>ID: 1</p>\n    <p>Name: John Doe</p>\n    <p>Email: john@example.com</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /redirect-profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/redirect-profile",
+              "host": ["{{base_url}}"],
+              "path": ["redirect-profile"]
+            }
+          },
+          "response": [
+            {
+              "name": "PUT /users/{id} response",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"Updated User\", \"email\": \"updated@example.com\", \"age\": 26}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User updated successfully\",\n  \"user\": {\n    \"id\": 1,\n    \"name\": \"Updated User\",\n    \"email\": \"updated@example.com\",\n    \"age\": 26,\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /profile-url",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/profile-url",
+              "host": ["{{base_url}}"],
+              "path": ["profile-url"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /users response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Users</title>\n</head>\n<body>\n    <h1>All Users</h1>\n    <p>This is the users page showing all users.</p>\n</body>\n</html>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Route Groups",
+      "item": [
+        {
+          "name": "Admin Group - GET /admin/users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /welcome response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/welcome",
+                  "host": ["{{base_url}}"],
+                  "path": ["welcome"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Welcome</title>\n</head>\n<body>\n    <h1>Welcome to our application!</h1>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "Admin Group - GET /admin/posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/posts",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "posts"]
+            }
+          },
+          "response": [
+            {
+              "name": "POST /users response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"Test User\", \"email\": \"test@example.com\", \"age\": 25}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["users"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User created successfully\",\n  \"user\": {\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"age\": 25,\n    \"id\": 1,\n    \"created_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Authentication Group - GET /dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["dashboard"]
+            }
+          },
+          "response": [
+            {
+              "name": "DELETE /users/{id} response",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "1"]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Authentication Group - GET /settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings",
+              "host": ["{{base_url}}"],
+              "path": ["settings"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /posts/{post}/comments/{comment} response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/posts/1/comments/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["posts", "1", "comments", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Comment Details</title>\n</head>\n<body>\n    <h1>Comment Details</h1>\n    <p>Post ID: 1</p>\n    <p>Comment ID: 1</p>\n    <p>Comment: This is a great post!</p>\n</body>\n</html>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "API Endpoints",
+      "item": [
+        {
+          "name": "GET /api/users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /users/{name?} with name response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/John",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "John"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>User Profile</title>\n</head>\n<body>\n    <h1>User Profile</h1>\n    <p>Hello John!</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "POST /api/users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"API User\", \"email\": \"api@example.com\", \"age\": 30}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /users/profile (named route) response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/users/profile",
+                  "host": ["{{base_url}}"],
+                  "path": ["users", "profile"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>User Profile</title>\n</head>\n<body>\n    <h1>User Profile Page</h1>\n    <p>Welcome to your profile!</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/users/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Updated API User\", \"email\": \"updatedapi@example.com\", \"age\": 31}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Admin Group - GET /admin/users response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/admin/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Admin Users</title>\n</head>\n<body>\n    <h1>Admin Users Dashboard</h1>\n    <p>This is the admin users page.</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/users/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Authentication Group - GET /dashboard response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/dashboard",
+                  "host": ["{{base_url}}"],
+                  "path": ["dashboard"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Dashboard</title>\n</head>\n<body>\n    <h1>Dashboard</h1>\n    <p>Welcome to your dashboard!</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /api/users/{id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Authentication Group - GET /settings response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/settings",
+                  "host": ["{{base_url}}"],
+                  "path": ["settings"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Settings</title>\n</head>\n<body>\n    <h1>Settings</h1>\n    <p>Configure your account settings here.</p>\n</body>\n</html>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Middleware Tests",
+      "item": [
+        {
+          "name": "GET /adult-content (without age)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/adult-content",
+              "host": ["{{base_url}}"],
+              "path": ["adult-content"]
+            }
+          },
+          "response": [
+            {
+              "name": "PUT /api/users/{id} response",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"Updated API User\", \"email\": \"updatedapi@example.com\", \"age\": 31}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User updated successfully\",\n  \"user\": {\n    \"id\": 1,\n    \"name\": \"Updated API User\",\n    \"email\": \"updatedapi@example.com\",\n    \"age\": 31,\n    \"updated_at\": \"2023-01-01T12:00:00.000000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /adult-content (with valid age)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Age",
+                "value": "25"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/adult-content",
+              "host": ["{{base_url}}"],
+              "path": ["adult-content"]
+            }
+          },
+          "response": [
+            {
+              "name": "DELETE /api/users/{id} response",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/users/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "1"]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"User deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /adult-content (with invalid age)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Age",
+                "value": "18"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/adult-content",
+              "host": ["{{base_url}}"],
+              "path": ["adult-content"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /adult-content (without age) response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/adult-content",
+                  "host": ["{{base_url}}"],
+                  "path": ["adult-content"]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Access Denied</title>\n</head>\n<body>\n    <h1>Access Denied</h1>\n    <p>You must be at least 21 years old to access this content.</p>\n</body>\n</html>"
+            }
+          ]
+        },
+        {
+          "name": "GET /adult-content (with valid age in body)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "age",
+                  "value": "25",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/adult-content",
+              "host": ["{{base_url}}"],
+              "path": ["adult-content"]
+            }
+          },
+          "response": [
+            {
+              "name": "GET /adult-content (with valid age in body) response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "age",
+                      "value": "25",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/adult-content",
+                  "host": ["{{base_url}}"],
+                  "path": ["adult-content"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "body": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Adult Content</title>\n</head>\n<body>\n    <h1>Adult Content</h1>\n    <p>You are 25 years old and can access this content.</p>\n</body>\n</html>"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "id": "base_url",
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}

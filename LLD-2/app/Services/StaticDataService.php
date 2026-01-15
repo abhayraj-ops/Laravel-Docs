@@ -19,7 +19,7 @@ class StaticDataService
         ['id' => 1, 'post_id' => 1, 'content' => 'Great post!', 'author' => 'Alice'],
         ['id' => 2, 'post_id' => 1, 'content' => 'Thanks for sharing', 'author' => 'Bob'],
         ['id' => 3, 'post_id' => 2, 'content' => 'Very informative', 'author' => 'Charlie'],
-        ['id' => 4, 'post_id' => 3, 'content' => 'Looking forward to more', 'author' => 'Diana']
+        ['id' => 4, 'post_id' => 3, 'content' => 'Looking forward to more', 'author' => 'Diana'],
     ];
 
     public function getUsers()
@@ -41,25 +41,46 @@ class StaticDataService
 
         return null;
     }
+
+    public function getUserByName($name): array
+    {
+        return array_filter($this->users, function ($user) use( $name){
+            return $user['name'] == $name;
+        });
+    }
+
     public function addUser(array $userData): array
     {
-        $id = max(array_column($this->users, 'id'), 0) + 1;
+        $id = count($this->users) + 1;
         $user = array_merge(['id' => $id], $userData);
         $this->users[] = $user;
+
         return $user;
     }
 
     public function updateUser(int $id, array $userData): ?array
     {
-        foreach (self::$users as &$user) {
+        foreach ($this->users as &$user) {
             if ($user['id'] == $id) {
                 $user = array_merge($user, $userData);
+
                 return $user;
             }
         }
+
         return null;
     }
 
+    public function deleteUser(int $id): bool
+    {
+        foreach ($this->users as &$user) {
+            if ($user['id'] == $id) {
+                unset($this->users[$id]);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public function getPosts()
     {
@@ -80,19 +101,19 @@ class StaticDataService
 
     }
 
-
     public function deletePost(int $id): bool
     {
         // Also delete associated comments
         self::$comments = array_filter(self::$comments, function ($comment) use ($id) {
             return $comment['post_id'] != $id;
         });
-        
+
         $initialCount = count(self::$posts);
         self::$posts = array_filter(self::$posts, function ($post) use ($id) {
             return $post['id'] != $id;
         });
         self::$posts = array_values(self::$posts); // Re-index array
+
         return $initialCount !== count(self::$posts);
     }
 
@@ -108,6 +129,7 @@ class StaticDataService
                 return $comment;
             }
         }
+
         return null;
     }
 
@@ -123,6 +145,7 @@ class StaticDataService
         $id = max(array_column(self::$comments, 'id'), 0) + 1;
         $comment = array_merge(['id' => $id], $commentData);
         self::$comments[] = $comment;
+
         return $comment;
     }
 
@@ -131,9 +154,11 @@ class StaticDataService
         foreach (self::$comments as &$comment) {
             if ($comment['id'] == $id) {
                 $comment = array_merge($comment, $commentData);
+
                 return $comment;
             }
         }
+
         return null;
     }
 
@@ -144,6 +169,14 @@ class StaticDataService
             return $comment['id'] != $id;
         });
         self::$comments = array_values(self::$comments); // Re-index array
+
         return $initialCount !== count(self::$comments);
+    }
+
+    public function getCommentsByPostIdAndCommentId($commentId, $postId)
+    {
+        return array_filter(self::$comments, function ($comment) use ($postId,$commentId) {
+            return $comment['post_id'] == $postId && $comment['id'] == $commentId;
+        });
     }
 }
