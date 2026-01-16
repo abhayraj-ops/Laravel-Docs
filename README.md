@@ -20,6 +20,15 @@ The `laravel-8.x` directory contains detailed documentation for Laravel 8.x, cov
 - [Middleware](laravel-8.x/9-middleware.md): How to create and use middleware to filter HTTP requests entering your application.
 - [CSRF Protection](laravel-8.x/10-csrf.md): How Laravel protects your application from cross-site request forgery attacks.
 - [Controllers](laravel-8.x/11-controllers.md): How to organize your request handling logic using controller classes.
+- [Request](laravel-8.x/12-request.md): Handling incoming HTTP requests and retrieving user input data.
+- [Response](laravel-8.x/13-response.md): Creating and sending HTTP responses with headers, cookies, and redirections.
+- [View](laravel-8.x/14-view.md): Separating application logic from presentation using Blade templating engine.
+- [Blade Template](laravel-8.x/15-blade-template.md): Laravel's templating engine providing clean syntax for dynamic HTML views.
+- [Migrations](laravel-8.x/16-migrations.md): Version control for database schemas, allowing structured database changes.
+- [Seeding](laravel-8.x/17-seeding.md): Populating the database with test data using seed classes.
+- [Testing](laravel-8.x/18-testing.md): Comprehensive testing framework supporting unit and feature tests.
+- [Validation](laravel-8.x/19-validation.md): Validating incoming request data with powerful and flexible rules.
+- [Eloquent ORM](laravel-8.x/21-eloquent-orm.md): Laravel's elegant object-relational mapper for database interactions.
 
 
 ## Getting Started
