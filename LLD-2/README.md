@@ -1,66 +1,87 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LLD-02: Laravel Routing Fundamentals
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
+This project teaches you how to define routes in Laravel, including basic routes, route parameters, named routes, and route groups. You'll learn how to handle different HTTP methods and create organized route structures.
 
-## About Laravel
+## Learning Objectives
+- Define basic routes for different HTTP methods
+- Use route parameters and constraints
+- Create named routes for easy URL generation
+- Organize routes using route groups
+- Apply middleware to routes
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prerequisites
+- Completed LLD-01 or have a working Laravel application
+- Understanding of HTTP methods (GET, POST, PUT, DELETE)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Implementation Outline
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Database Schema
+- No database required for this routing-focused project
 
-## Learning Laravel
+### Tables
+- No tables required for this routing-focused project
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Routes to Implement
+#### Basic Routes
+- GET route at `/welcome` returning welcome message
+- GET route at `/users` returning all users message
+- POST route at `/users` for creating new users
+- PUT route at `/users/{id}` for updating users
+- DELETE route at `/users/{id}` for deleting users
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### Route Parameters
+- GET route with required parameter at `/users/{id}`
+- GET route with multiple parameters at `/posts/{post}/comments/{comment}`
+- GET route with optional parameter at `/users/{name?}`
+- GET route with parameter constraint at `/users/{id}` accepting only numeric IDs
+- GET route with multiple parameter constraints at `/users/{id}/{name}` accepting numeric IDs and alphabetic names
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Named Routes
+- Named route called 'profile' at `/users/profile`
+- Redirect route at `/redirect-profile` that redirects to the profile route
+- Route at `/profile-url` that generates and displays the profile route URL
 
-## Laravel Sponsors
+#### Route Groups
+- Admin group with prefix 'admin' containing:
+  - GET route at `/users` for admin users page
+  - GET route at `/posts` for admin posts page
+- Authentication group containing:
+  - GET route at `/dashboard` for dashboard page
+  - GET route at `/settings` for settings page
+- Namespace group using 'Admin' namespace containing:
+  - GET route at `/users` resolving to Admin\UserController
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Middleware Implementation
+- Custom middleware named 'AgeVerification' that checks if request age is greater than 20
+- Register 'age.verify' middleware in route middleware array
+- Apply 'age.verify' middleware to route at `/adult-content`
 
-### Premium Partners
+### API Endpoints
+- GET `/api/users` - Retrieve all users
+- POST `/api/users` - Create a new user
+- PUT `/api/users/{id}` - Update a specific user
+- DELETE `/api/users/{id}` - Delete a specific user
+- GET `/api/users/{id}` - Retrieve a specific user with parameter validation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Functions to Implement
+- Route handler functions for each defined route
+- Middleware handle function for age verification logic
+- Helper functions for route parameter validation
 
-## Contributing
+### Features to Implement
+- Basic HTTP method routing (GET, POST, PUT, DELETE)
+- Route parameter handling with required, optional, and constrained parameters
+- Named route creation and URL generation
+- Route grouping with prefixes, middleware, and namespaces
+- Custom middleware creation and application
+- Route parameter validation and constraints
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Testing Your Routes
+1. Start the development server using Artisan command
+2. Access each defined route via browser or API testing tool
+3. Test all HTTP methods with appropriate tools
+4. Verify middleware functionality with different age inputs
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Conclusion
+This project taught you the fundamentals of Laravel routing, including parameters, named routes, groups, and middleware. These concepts are essential for organizing your application's URL structure and controlling access to different parts of your application.

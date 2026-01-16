@@ -1,66 +1,86 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LLD-03: Laravel Controllers
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
+This project focuses on creating and using controllers in Laravel. You'll learn how to organize your request handling logic using controller classes, implement different types of controllers, and connect them to routes.
 
-## About Laravel
+## Learning Objectives
+- Create basic controllers using Artisan command
+- Implement resource controllers for CRUD operations
+- Use controller middleware for request filtering
+- Pass data from controllers to views with proper dependency injection
+- Implement controller methods for different HTTP verbs
+- Configure service container bindings for controller dependencies
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prerequisites
+- Completed LLD-01 and LLD-02
+- Understanding of routing concepts
+- Basic knowledge of PHP classes
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Implementation Outline
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Database Schema
+- Users table with fields: id, name, email, password, timestamps
+- Posts table with fields: id, title, content, user_id, timestamps
 
-## Learning Laravel
+### Tables
+- users table for user management
+- posts table for post management
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Controllers to Implement
+- UserController with methods: index, show, create, store, edit, update, destroy
+- PostController as a resource controller with full CRUD methods
+- Custom controller with dependency injection capabilities
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Routes to Implement
+- GET `/users` mapped to UserController@index
+- GET `/users/create` mapped to UserController@create
+- POST `/users` mapped to UserController@store
+- GET `/users/{id}` mapped to UserController@show
+- GET `/users/{id}/edit` mapped to UserController@edit
+- PUT `/users/{id}` mapped to UserController@update
+- DELETE `/users/{id}` mapped to UserController@destroy
+- Resource routes for posts at `/posts` with all seven RESTful methods
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Middleware Implementation
+- Authentication middleware for protected routes
+- Guest middleware for public routes
+- Custom middleware for specific controller actions
+- Middleware applied to entire controllers and specific methods
 
-## Laravel Sponsors
+### API Endpoints
+- GET `/api/users` - Retrieve all users
+- POST `/api/users` - Create a new user
+- GET `/api/users/{id}` - Retrieve a specific user
+- PUT `/api/users/{id}` - Update a specific user
+- DELETE `/api/users/{id}` - Delete a specific user
+- Resource endpoints for posts with full CRUD operations
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Functions to Implement
+- Controller constructor for middleware setup
+- Index method to display resource listings
+- Show method to display specific resources
+- Create method to show creation forms
+- Store method to handle resource creation
+- Edit method to show editing forms
+- Update method to handle resource updates
+- Destroy method to handle resource deletion
+- Validation functions for input processing
 
-### Premium Partners
+### Features to Implement
+- Basic controller creation with Artisan command
+- Resource controller implementation with full CRUD operations
+- Controller middleware application to entire controllers and specific methods
+- Data passing from controllers to views using various methods
+- Dependency injection in controller methods
+- Input validation in controller methods
+- Service container integration for controller dependencies
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Testing Your Controllers
+1. Start the development server
+2. Access the routes connected to your controllers
+3. Test form submissions and CRUD operations
+4. Verify that middleware is working correctly
+5. Test API endpoints with appropriate HTTP clients
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Conclusion
+This project taught you how to organize your application logic using controllers. Controllers help keep your routes file clean and provide a structured way to handle HTTP requests. You learned about basic controllers, resource controllers, middleware, and passing data to views.
