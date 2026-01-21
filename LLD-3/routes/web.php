@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
-Route::resource('users', UserController::class);
+Route::post('api/users/create', [UserController::class, 'create']);
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+

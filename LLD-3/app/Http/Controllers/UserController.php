@@ -17,39 +17,42 @@ class UserController extends Controller
     {
         $users = User::all();
 
-        return view('users.index', compact('users'));
+        return response()->json([
+            'data' => $users
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('users.create');
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUserRequest $request)
+    public function create(StoreUserRequest $request)
     {
         $validateData = $request->validated();
 
         $validateData['password'] = bcrypt($validateData['password']);
 
-        User::create($validateData);
+        $user = User::create($validateData);
 
-        return redirect()->route('users.index')->with('success', 'User Successfully Created!');
+        return response()->json([
+            'message' => 'User Successfully Created!',
+            'data' => $user
+        ]);
+    }
+
+
+    public function store()
+    {
+
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        $user = User::find($id);
+
+        return response()->json([
+            'data' => $user
+        ]);
     }
 
     /**
@@ -63,16 +66,35 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, $id)
     {
-        //
+        $user = User::find($id);
+
+        $validateData = $request->validated();
+
+        $validateData['password'] = bcrypt($validateData['password']);
+
+        $user->name = $validateData['name'];
+        $user->email = $validateData['email'];
+        $user->password = $validateData['password'];
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'User Updated Successfully',
+            'data' => $user
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        //
+        User::destroy($id);
+        return response()->json([
+            'message' => 'User Deleted Successfully'
+        ]);
+
     }
 }
