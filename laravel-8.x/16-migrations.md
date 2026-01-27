@@ -483,7 +483,7 @@ Migration rollbacks work by reversing the last batch of applied migrations. Each
 ```mermaid
 graph TD
     A[migrate:rollback] --> B[Identify Last Batch]
-    B --> C[Execute down() on Each Migration]
+    B --> C["Execute down() on Each Migration"]
     C --> D[Remove Records from migrations Table]
     D --> E[Update Database Schema]
 ```
@@ -958,11 +958,11 @@ graph TD
     B --> E[Regular Index]
     B --> F[Full Text Index]
     B --> G[Spatial Index]
-    C --> H[id() method]
-    D --> I[unique() method]
-    E --> J[index() method]
-    F --> K[fullText() method]
-    G --> L[spatialIndex() method]
+    C --> H["id() method"]
+    D --> I["unique() method"]
+    E --> J["index() method"]
+    F --> K["fullText() method"]
+    G --> L["spatialIndex() method"]
 ```
 
 ### 9.4 Code Examples

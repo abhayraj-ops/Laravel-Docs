@@ -14,6 +14,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::middleware(['check.age'])->group(function(){
+    
+    Route::get('/adult-content', function() {
+
+    });
+
+    Route::get('/movies', function() {
+
+    });
+
+    Route::get('/events', function() {
+
+    });
+
+    Route::get('/premium-content', function() {
+
+    })->middleware('auth.user');
+
 });
+
+Route::get('/premium-content', function () {
+
+})->middleware(['auth.user','check.role']);
+
+
+Route::get('/api/data', function () {
+
+})->middleware(['log.request']);
+

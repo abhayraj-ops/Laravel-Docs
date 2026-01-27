@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::post('/submit-form', function () {
+
 });
+
+Route::get('/admin-panel', function () {
+
+})->middleware(['auth.user', 'check.role:admin']);

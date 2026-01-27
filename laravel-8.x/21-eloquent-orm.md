@@ -455,10 +455,10 @@ foreach (Flight::all() as $flight) {
 
 ```mermaid
 graph TD
-    A[Retrieve Models] --> B[all() method]
-    A --> C[get() method]
-    A --> D[where() method]
-    A --> E[find() method]
+    A[Retrieve Models] --> B["all() method"]
+    A --> C["get() method"]
+    A --> D["where() method"]
+    A --> E["find() method"]
 ```
 
 Building Queries
@@ -654,11 +654,11 @@ $flight = Flight::where('legs', '>', 3)->firstOr(function () {
 
 ```mermaid
 graph TD
-    A[Single Model Retrieval] --> B[find() method]
-    A --> C[first() method]
-    A --> D[firstWhere() method]
-    A --> E[findOr() method]
-    A --> F[firstOr() method]
+    A[Single Model Retrieval] --> B["find() method"]
+    A --> C["first() method"]
+    A --> D["firstWhere() method"]
+    A --> E["findOr() method"]
+    A --> F["firstOr() method"]
 ```
 
 ### Not Found Exceptions
@@ -714,8 +714,8 @@ $flight = Flight::firstOrNew(
 
 ```mermaid
 graph TD
-    A[Retrieve or Create] --> B[firstOrCreate()]
-    A --> C[firstOrNew()]
+    A[Retrieve or Create] --> B["firstOrCreate()"]
+    A --> C["firstOrNew()"]
     B --> D[Find or Insert]
     C --> E[Find or Instantiate]
 ```
@@ -757,10 +757,10 @@ $flight = Flight::create([
 
 ```mermaid
 graph TD
-    A[Insert Model] --> B[new Model()]
+    A[Insert Model] --> B["new Model()"]
     B --> C[Set Attributes]
-    C --> D[save() method]
-    A --> E[create() method]
+    C --> D["save() method"]
+    A --> E["create() method"]
     E --> F[Mass Assignment]
     F --> G[fillable/guarded required]
 ```
@@ -800,10 +800,10 @@ foreach (Flight::where('active', 1)->where('destination', 'San Diego')->get() as
 graph TD
     A[Update Model] --> B[Retrieve Model]
     B --> C[Modify Attributes]
-    C --> D[save() method]
+    C --> D["save() method"]
     A --> E[Mass Update]
-    E --> F[where() conditions]
-    F --> G[update() method]
+    E --> F["where() conditions"]
+    F --> G["update() method"]
 ```
 
 ### Mass Assignment
@@ -872,7 +872,7 @@ graph TD
     A --> C[guarded array]
     B --> D[Allow specific fields]
     C --> E[Block specific fields]
-    D --> F[create() method]
+    D --> F["create() method"]
     E --> F
 ```
 
@@ -898,8 +898,8 @@ Flight::destroy(collect([1, 2, 3]));
 
 ```mermaid
 graph TD
-    A[Delete Model] --> B[find() + delete()]
-    A --> C[destroy() method]
+    A[Delete Model] --> B["find() + delete()"]
+    A --> C["destroy() method"]
     C --> D[Single ID]
     C --> E[Multiple IDs]
     C --> F[Array of IDs]
@@ -970,7 +970,7 @@ graph TD
     A[Soft Delete] --> B[Set deleted_at]
     B --> C[Record remains in DB]
     C --> D[Excluded from queries]
-    D --> E[trashed() method]
+    D --> E["trashed() method"]
 ```
 
 ### Querying Soft Deleted Models
@@ -1037,10 +1037,10 @@ $flight->history()->forceDelete();
 
 ```mermaid
 graph TD
-    A[Soft Delete Querying] --> B[withTrashed()]
-    A --> C[onlyTrashed()]
-    A --> D[restore()]
-    A --> E[forceDelete()]
+    A[Soft Delete Querying] --> B["withTrashed()"]
+    A --> C["onlyTrashed()"]
+    A --> D["restore()"]
+    A --> E["forceDelete()"]
     B --> F[Include deleted records]
     C --> G[Only deleted records]
     D --> H[Undelete records]
