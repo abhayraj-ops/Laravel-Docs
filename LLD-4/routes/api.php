@@ -18,21 +18,21 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::middleware(['check.age'])->group(function(){
-    
-    Route::get('/adult-content', function() {
+Route::middleware(['check.age'])->group(function () {
 
+    Route::get('/adult-content', function () {
+        return response()->json(['success' => 'You are old enough'], 200);
     });
 
-    Route::get('/movies', function() {
-
+    Route::get('/movies', function () {
+        return response()->json(['success' => 'You are old enough to access movies'], 200);
     });
 
-    Route::get('/events', function() {
-
+    Route::get('/events', function () {
+        return response()->json(['success' => 'You are old enough events'], 200);
     });
 
-    Route::get('/premium-content', function() {
+    Route::get('/premium-content', function () {
 
     })->middleware('auth.user');
 
@@ -40,10 +40,14 @@ Route::middleware(['check.age'])->group(function(){
 
 Route::get('/premium-content', function () {
 
-})->middleware(['auth.user','check.role']);
+})->middleware(['auth.user', 'check.role']);
 
 
 Route::get('/api/data', function () {
 
 })->middleware(['log.request']);
+
+Route::post('/login', function () { });
+
+Route::post('/signup', function () { });
 
