@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::middleware(['check.age'])->group(function () {
+Route::middleware(['web','check.age'])->group(function () {
 
     Route::get('/adult-content', function () {
         return response()->json(['success' => 'You are old enough'], 200);
@@ -33,21 +36,13 @@ Route::middleware(['check.age'])->group(function () {
     });
 
     Route::get('/premium-content', function () {
-
-    })->middleware('auth.user');
+        return response()->json(['success' => 'You are have access to premium content'], 200);
+    })->middleware(['auth:sanctum', 'auth.user']);
 
 });
-
-Route::get('/premium-content', function () {
-
-})->middleware(['auth.user', 'check.role']);
-
 
 Route::get('/api/data', function () {
 
 })->middleware(['log.request']);
 
-Route::post('/login', function () { });
-
-Route::post('/signup', function () { });
 

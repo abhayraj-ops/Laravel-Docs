@@ -15,7 +15,14 @@ class CheckAge
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $age = $request->input("age");
+        if (!$request->session()->has('age')) {
+            return response()->json([
+                'error' => 'Age not found in session'
+            ], 401);
+        }
+
+        $age = (int) $request->session()->get('age');
+        
         if ($age >= 18) {
             return $next($request);
         } else {
