@@ -1,3 +1,6 @@
 # Ignore BOINT-24 directory
 BOINT-24/
+BOINT-32/
+
+Status/
 temp

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class LogRequest
@@ -15,6 +16,18 @@ class LogRequest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        Log::info('Request received', [
+            'method' => $request->method(),
+            'uri' => $request->getRequestUri(),
+            'ip' => $request->ip(),
+        ]);
+
+        $response = $next($request);
+
+        Log::info('Response sent', [
+            'status' => $response->getStatusCode(),
+        ]);
+
+        return $response;
     }
 }
