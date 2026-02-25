@@ -1,0 +1,382 @@
+[
+  {
+    "url": "https://docs.laravel-excel.com/3.1/architecture",
+    "title": "Lifecycle | Laravel Excel",
+    "meta_description": "Supercharged Excel exports and imports in Laravel",
+    "meta_keywords": "",
+    "headings": [
+      {
+        "level": 1,
+        "text": "#Lifecycle"
+      },
+      {
+        "level": 2,
+        "text": "#Introduction"
+      },
+      {
+        "level": 2,
+        "text": "#Exports Lifecycle Overview"
+      },
+      {
+        "level": 2,
+        "text": "#Imports Lifecycle Overview"
+      },
+      {
+        "level": 3,
+        "text": "#Export Object"
+      },
+      {
+        "level": 3,
+        "text": "#Passing on the Export object"
+      },
+      {
+        "level": 3,
+        "text": "#Handling the Export object"
+      },
+      {
+        "level": 3,
+        "text": "#Passing on to PhpSpreadsheet"
+      },
+      {
+        "level": 3,
+        "text": "#Creating a Response"
+      },
+      {
+        "level": 3,
+        "text": "#Import Object"
+      },
+      {
+        "level": 3,
+        "text": "#Passing on the Import object"
+      },
+      {
+        "level": 3,
+        "text": "#Handling the Import object"
+      },
+      {
+        "level": 4,
+        "text": "#Facade"
+      },
+      {
+        "level": 4,
+        "text": "#Dependency injection"
+      },
+      {
+        "level": 4,
+        "text": "#Contract"
+      },
+      {
+        "level": 4,
+        "text": "#Container binding"
+      },
+      {
+        "level": 4,
+        "text": "#Exportable trait"
+      },
+      {
+        "level": 4,
+        "text": "#Writer type detection"
+      },
+      {
+        "level": 4,
+        "text": "#Starting the Writing process"
+      },
+      {
+        "level": 4,
+        "text": "#Multiple sheets"
+      },
+      {
+        "level": 4,
+        "text": "#Processing the sheets"
+      },
+      {
+        "level": 4,
+        "text": "#Download the file"
+      },
+      {
+        "level": 4,
+        "text": "#Storing the file"
+      },
+      {
+        "level": 4,
+        "text": "#Contract"
+      },
+      {
+        "level": 4,
+        "text": "#Importable trait"
+      },
+      {
+        "level": 4,
+        "text": "#Reader type detection"
+      },
+      {
+        "level": 4,
+        "text": "#Starting the Reading process"
+      },
+      {
+        "level": 4,
+        "text": "#Multiple sheets"
+      },
+      {
+        "level": 4,
+        "text": "#Processing the sheets"
+      }
+    ],
+    "paragraphs": [
+      "Getting Started",
+      "Architecture Concepts",
+      "Exports",
+      "Imports",
+      "When using a package in your application, it's good to understand how the package functions behind the scenes.\nUnderstanding the behind-the-scenes will make you feel more comfortable and confident using the maximum potential of the tool.",
+      "The goal of this page is to give you a high-level overview of how Laravel Excel works.",
+      "This section will try to give you an overview of how the export works behind the scenes.",
+      "Everything starts with theExportobject. This objectencapsulatesyour entire export logic.\nIt both configures and handles the export logic.",
+      "A simple example of an export object is:",
+      "If you want to read more about export objects, go to the architecture page ofexport objects.",
+      "Next the Export object will be passed on to the Laravel Excel package. The main entry point for this is theMaatwebsite/Excel/Excelclass. This class can be called in multiple ways.",
+      "The easiest way to work with theExcelclass is to use theMaatwebsite\\Excel\\Facades\\Excelfacade.\nIf you useauto-discovery(opens new window), you can use the alias\\Exceldirectly instead of using the fully qualified namespace.",
+      "You can inject theMaatwebsite/Excel/Excelmanager class into your class, either via constructor injection\nor method injection in case of a controller.",
+      "You can also use theMaatwebsite\\Excel\\Exporterinterface to decouple more from the concrete Excel manager implementation. The contract offers the same methods as theExcelclass.\nIt will make it easier to e.g. stub out the Exporter in your unit tests. TheExportercontract can be either injected via the constructor or a method in a controller.",
+      "If you want to bind theMaatwebsite\\Excel\\Excelmanager to your own class via a container binding, you can use theexcelcontainer binding.",
+      "If you prefer a sprinkle of magic, you can use theMaatwebsite\\Excel\\Concerns\\Exportabletrait in yourExportobject. This trait will expose a couple of methods that will make it possible to directly export anExportobject.",
+      "You can now download the export without the need for thefacadeorExcelmanager.",
+      "Read more about the exportable trait in theexportablesdocs.",
+      "After using one of the above methods to pass on theExportobject to theExcelmanager, it will try to figure out what export it needs to be generated to.\nThis will be either based on the extension of the file, the explicitly passed writer type. You can find the extension to writer type mapping in theexcel.phpconfig, in theextension_detectorsection.\nIn case no writer type can be detected, aMaatwebsite\\Excel\\Exceptions\\NoTypeDetectedExceptionexception is thrown and the export process will be stopped.",
+      "TheExcelmanager will then delegate the handling to theMaatwebsite\\Excel\\Writer. The first action of theWriteris to register the event listeners that are registered.\nNext it will create a newPhpOffice\\PhpSpreadsheet\\Spreadsheetinstance that we will use to convert ourExportobject to.",
+      "The first event raised is theBeforeExportevent. This is raised just after theSpreadsheetinstance is created and allows early access to it.",
+      "Next theWriterwill determine if multiple sheets are configured, by checking for theMaatwebsite\\Excel\\Concerns\\WithMultipleSheetsconcern.",
+      "Then it will delegate the further handling of each sheet to theMaatwebsite\\Excel\\Sheetclass.",
+      "In theSheetclass, the most heavy lifting happens. It first will create aPhpOffice\\PhpSpreadsheet\\Worksheet\\Worksheetinstance. Then it will raise theBeforeSheetevent which allows you to hook into the moment just before the sheet handling starts.",
+      "Then it will determine what kind of export we are dealing with:FromQuery,FromArray,FromCollectionorFromView. Based on that it will start the connected export process.",
+      "When theSheetstarts appending records, it will first call themap()method if theWithMappingconcern is used. This allows theExportobject to format the data before it is inserted.",
+      "Then it will handle column formatting (WithColumnFormattingconcern) and cell autosizing (ShouldAutoSize).",
+      "To close off the Sheet processing, it will raise aAfterSheetevent.",
+      "After the sheets are processed, the writing process will start. The writing process is started by raising theBeforeWritingevent; this allows you to hook into the process of writing.\nNext we will create a newPhpSpreadsheet Writerbased on the writer type that was determined. Then it will save it to a temporary file and return that filepath to theExcelmanager.",
+      "TheExcelmanager basically has 2 types of responses, it either starts thedownloadprocess or it willstorethe file to disk.",
+      "We will take the temporary file that was returned by theWriterand use Laravel'sResponseFactoryto create aSymfony\\Component\\HttpFoundation\\BinaryFileResponse. When returning this response in your controller, it will start a download.",
+      "The storing of the file will be handled by Laravel'sFilesystem. By default the file will be stored on yourdefaultdisk, but you can also pass a custom disk via theExcel::store()method.",
+      "This section will try to give you an overview of how the import works behind the scenes.",
+      "Everything starts with theImportobject. This objectencapsulatesyour entire import logic.\nIt both configures and handles the import logic.",
+      "A simple example of an import object is:",
+      "If you want to read more about imports objects, go to the architecture page ofimports objects.",
+      "Next the Import object will be passed on to the Laravel Excel package. The main entry point for this is theMaatwebsite/Excel/Excelclass. This class can be called in the same way as outlined in the Export lifecycle.",
+      "You can also use theMaatwebsite\\Excel\\Importerinterface to decouple more from the concrete Excel manager implementation. The contract offers the same methods as theExcelclass.\nIt will make it easier to e.g. stub out the Importer in your unit tests. TheImportercontract can be either injected via the constructor or the method of a controller.",
+      "If you prefer a sprinkle of magic, you can use theMaatwebsite\\Excel\\Concerns\\Importabletrait in yourImportobject. This trait will expose a couple of methods that will make it possible to directly import anImportobject.",
+      "You can now import without the need for thefacadeorExcelmanager.",
+      "Read more about the importable trait in theimportablesdocs.",
+      "After using one of the above methods to pass on theImportobject to theExcelmanager, it will try to figure out what reader type it is .\nThis will be either based on the extension of the file or the explicitly passed reader type. You can find the extension to reader type mapping in theexcel.phpconfig, in theextension_detectorsection.\nIn case no reader type can be detected, aMaatwebsite\\Excel\\Exceptions\\NoTypeDetectedExceptionexception is thrown and the import process will be stopped.",
+      "TheExcelmanager will then delegate the handling to theMaatwebsite\\Excel\\Reader. The first action of theReaderis to register the event listeners that are registered.\nIt will copy the file from Laravel'sFilesystemto the local filesystem, so PhpSpreadsheet can read it.\nNext it will create a PhpSpreadsheetReaderbased on the reader type that was given and load the file into aPhpOffice\\PhpSpreadsheet\\Spreadsheetinstance.",
+      "Next it will create a newPhpOffice\\PhpSpreadsheet\\Spreadsheetinstance that we will use to read ourImportobject from.",
+      "The first event that is raised, is theBeforeImportevent. This is raised just after theSpreadsheetinstance is loaded and allows early access to it.",
+      "Next we will determine if we are dealing with multiple sheets. This is done based on theWithMultipleSheetsconcern.",
+      "Then each Sheet gets processed. This process gets started off by raising theBeforeSheetevent.\nThen it will either import it to a Collection, an array or handle each row as an Eloquent model.",
+      "The sheet handling is ended by raising theAfterSheetevent.",
+      "âSupportImport & Export Objectsâ"
+    ],
+    "links": [
+      {
+        "text": "Lifecycle",
+        "url": "https://docs.laravel-excel.com/3.1/architecture/"
+      },
+      {
+        "text": "Import & Export Objects",
+        "url": "https://docs.laravel-excel.com/3.1/architecture/objects.html"
+      },
+      {
+        "text": "Concerns",
+        "url": "https://docs.laravel-excel.com/3.1/architecture/concerns.html"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#lifecycle"
+      },
+      {
+        "text": "Introduction",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#introduction"
+      },
+      {
+        "text": "Exports Lifecycle Overview",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#exports-lifecycle-overview"
+      },
+      {
+        "text": "Export Object",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#export-object"
+      },
+      {
+        "text": "Passing on the Export object",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#passing-on-the-export-object"
+      },
+      {
+        "text": "Handling the Export object",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#handling-the-export-object"
+      },
+      {
+        "text": "Passing on to PhpSpreadsheet",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#passing-on-to-phpspreadsheet"
+      },
+      {
+        "text": "Creating a Response",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#creating-a-response"
+      },
+      {
+        "text": "Imports Lifecycle Overview",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#imports-lifecycle-overview"
+      },
+      {
+        "text": "Import Object",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#import-object"
+      },
+      {
+        "text": "Passing on the Import object",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#passing-on-the-import-object"
+      },
+      {
+        "text": "Handling the Import object",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#handling-the-import-object"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#introduction"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#exports-lifecycle-overview"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#export-object"
+      },
+      {
+        "text": "export objects",
+        "url": "https://docs.laravel-excel.com/3.1/architecture/objects.html"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#passing-on-the-export-object"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#facade"
+      },
+      {
+        "text": "auto-discovery(opens new window)",
+        "url": "https://laravel.com/docs/packages#package-discovery"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#dependency-injection"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#contract"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#container-binding"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#exportable-trait"
+      },
+      {
+        "text": "exportables",
+        "url": "https://docs.laravel-excel.com/3.1/exports/exportables.html"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#handling-the-export-object"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#writer-type-detection"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#starting-the-writing-process"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#multiple-sheets"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#processing-the-sheets"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#passing-on-to-phpspreadsheet"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#creating-a-response"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#download-the-file"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#storing-the-file"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#imports-lifecycle-overview"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#import-object"
+      },
+      {
+        "text": "imports objects",
+        "url": "https://docs.laravel-excel.com/3.1/architecture/objects.html"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#passing-on-the-import-object"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#contract-2"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#importable-trait"
+      },
+      {
+        "text": "importables",
+        "url": "https://docs.laravel-excel.com/3.1/imports/importables.html"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#handling-the-import-object"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#reader-type-detection"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#starting-the-reading-process"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#multiple-sheets-2"
+      },
+      {
+        "text": "#",
+        "url": "https://docs.laravel-excel.com/3.1/architecture#processing-the-sheets-2"
+      },
+      {
+        "text": "Support",
+        "url": "https://docs.laravel-excel.com/3.1/getting-started/support.html"
+      },
+      {
+        "text": "Import & Export Objects",
+        "url": "https://docs.laravel-excel.com/3.1/architecture/objects.html"
+      }
+    ],
+    "images": [],
+    "text_content": "#\nLifecycle\nIntroduction\nExports Lifecycle Overview\nExport Object\nPassing on the Export object\nHandling the Export object\nPassing on to PhpSpreadsheet\nCreating a Response\nImports Lifecycle Overview\nImport Object\nPassing on the Import object\nHandling the Import object\n#\nIntroduction\nWhen using a package in your application, it's good to understand how the package functions behind the scenes.\nUnderstanding the behind-the-scenes will make you feel more comfortable and confident using the maximum potential of the tool.\nThe goal of this page is to give you a high-level overview of how Laravel Excel works.\n#\nExports Lifecycle Overview\nThis section will try to give you an overview of how the export works behind the scenes.\n#\nExport Object\nEverything starts with the\nExport\nobject. This object\nencapsulates\nyour entire export logic.\nIt both configures and handles the export logic.\nA simple example of an export object is:\n<?php\nnamespace\nApp\n\\\nExports\n;\nuse\nApp\n\\\nUser\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nFromCollection\n;\nclass\nUsersExport\nimplements\nFromCollection\n{\npublic\nfunction\ncollection\n(\n)\n{\nreturn\nUser\n::\nall\n(\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\nIf you want to read more about export objects, go to the architecture page of\nexport objects\n.\n#\nPassing on the Export object\nNext the Export object will be passed on to the Laravel Excel package. The main entry point for this is the\nMaatwebsite/Excel/Excel\nclass. This class can be called in multiple ways.\n#\nFacade\nThe easiest way to work with the\nExcel\nclass is to use the\nMaatwebsite\\Excel\\Facades\\Excel\nfacade.\nIf you use\nauto-discovery\n(opens new window)\n, you can use the alias\n\\Excel\ndirectly instead of using the fully qualified namespace.\n#\nDependency injection\nYou can inject the\nMaatwebsite/Excel/Excel\nmanager class into your class, either via constructor injection\nor method injection in case of a controller.\n<?php\nuse\nApp\n\\\nExports\n\\\nUsersExport\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nExcel\n;\nclass\nExportController\n{\nprivate\n$excel\n;\npublic\nfunction\n__construct\n(\nExcel\n$excel\n)\n{\n$this\n->\nexcel\n=\n$excel\n;\n}\npublic\nfunction\nexportViaConstructorInjection\n(\n)\n{\nreturn\n$this\n->\nexcel\n->\ndownload\n(\nnew\nUsersExport\n,\n'users.xlsx'\n)\n;\n}\npublic\nfunction\nexportViaMethodInjection\n(\nExcel\n$excel\n)\n{\nreturn\n$excel\n->\ndownload\n(\nnew\nUsersExport\n,\n'users.xlsx'\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n#\nContract\nYou can also use the\nMaatwebsite\\Excel\\Exporter\ninterface to decouple more from the concrete Excel manager implementation. The contract offers the same methods as the\nExcel\nclass.\nIt will make it easier to e.g. stub out the Exporter in your unit tests. The\nExporter\ncontract can be either injected via the constructor or a method in a controller.\nuse\nApp\n\\\nExports\n\\\nUsersExport\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nExporter\n;\nclass\nExportsController\n{\nprivate\n$exporter\n;\npublic\nfunction\n__construct\n(\nExporter\n$exporter\n)\n{\n$this\n->\nexporter\n=\n$exporter\n;\n}\npublic\nfunction\nexport\n(\n)\n{\nreturn\n$this\n->\nexporter\n->\ndownload\n(\nnew\nUsersExport\n,\n'users.xlsx'\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n#\nContainer binding\nIf you want to bind the\nMaatwebsite\\Excel\\Excel\nmanager to your own class via a container binding, you can use the\nexcel\ncontainer binding.\n$this\n->\napp\n->\nbind\n(\nYourCustomExporter\n::\nclass\n,\nfunction\n(\n)\n{\nreturn\nnew\nYourCustomExporter\n(\n$this\n->\napp\n[\n'excel'\n]\n)\n;\n}\n)\n;\n1\n2\n3\n#\nExportable trait\nIf you prefer a sprinkle of magic, you can use the\nMaatwebsite\\Excel\\Concerns\\Exportable\ntrait in your\nExport\nobject. This trait will expose a couple of methods that will make it possible to directly export an\nExport\nobject.\nnamespace\nApp\n\\\nExports\n;\nuse\nApp\n\\\nUser\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nFromCollection\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nExportable\n;\nclass\nUsersExport\nimplements\nFromCollection\n{\nuse\nExportable\n;\npublic\nfunction\ncollection\n(\n)\n{\nreturn\nUser\n::\nall\n(\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\nYou can now download the export without the need for the\nfacade\nor\nExcel\nmanager.\nreturn\n(\nnew\nUsersExport\n)\n->\ndownload\n(\n'users.xlsx'\n)\n;\n1\nRead more about the exportable trait in the\nexportables\ndocs.\n#\nHandling the Export object\n#\nWriter type detection\nAfter using one of the above methods to pass on the\nExport\nobject to the\nExcel\nmanager, it will try to figure out what export it needs to be generated to.\nThis will be either based on the extension of the file, the explicitly passed writer type. You can find the extension to writer type mapping in the\nexcel.php\nconfig, in the\nextension_detector\nsection.\nIn case no writer type can be detected, a\nMaatwebsite\\Excel\\Exceptions\\NoTypeDetectedException\nexception is thrown and the export process will be stopped.\n#\nStarting the Writing process\nThe\nExcel\nmanager will then delegate the handling to the\nMaatwebsite\\Excel\\Writer\n. The first action of the\nWriter\nis to register the event listeners that are registered.\nNext it will create a new\nPhpOffice\\PhpSpreadsheet\\Spreadsheet\ninstance that we will use to convert our\nExport\nobject to.\nThe first event raised is the\nBeforeExport\nevent. This is raised just after the\nSpreadsheet\ninstance is created and allows early access to it.\n#\nMultiple sheets\nNext the\nWriter\nwill determine if multiple sheets are configured, by checking for the\nMaatwebsite\\Excel\\Concerns\\WithMultipleSheets\nconcern.\nThen it will delegate the further handling of each sheet to the\nMaatwebsite\\Excel\\Sheet\nclass.\n#\nProcessing the sheets\nIn the\nSheet\nclass, the most heavy lifting happens. It first will create a\nPhpOffice\\PhpSpreadsheet\\Worksheet\\Worksheet\ninstance. Then it will raise the\nBeforeSheet\nevent which allows you to hook into the moment just before the sheet handling starts.\nThen it will determine what kind of export we are dealing with:\nFromQuery\n,\nFromArray\n,\nFromCollection\nor\nFromView\n. Based on that it will start the connected export process.\nFromView\nwill pass on the rendered\nBlade\nview to PhpSpreadsheet's\nHtml\nReader. That Reader will turn the table html into Excel cells. It also handles some inline styles (color and background color) and col/rowspans.\nThe\nQuery\npassed with the\nFromQuery\nwill automatically be chunked and each chunk will be appended to the Sheet. The chunking is done to limit the amount of Eloquent objects it needs to keep in memory. It greatly reduces memory usage.\nThe entire array of Collection will directly be appended to the Sheet.\nWhen the\nSheet\nstarts appending records, it will first call the\nmap()\nmethod if the\nWithMapping\nconcern is used. This allows the\nExport\nobject to format the data before it is inserted.\nThen it will handle column formatting (\nWithColumnFormatting\nconcern) and cell autosizing (\nShouldAutoSize\n).\nTo close off the Sheet processing, it will raise a\nAfterSheet\nevent.\n#\nPassing on to PhpSpreadsheet\nAfter the sheets are processed, the writing process will start. The writing process is started by raising the\nBeforeWriting\nevent; this allows you to hook into the process of writing.\nNext we will create a new\nPhpSpreadsheet Writer\nbased on the writer type that was determined. Then it will save it to a temporary file and return that filepath to the\nExcel\nmanager.\n#\nCreating a Response\nThe\nExcel\nmanager basically has 2 types of responses, it either starts the\ndownload\nprocess or it will\nstore\nthe file to disk.\n#\nDownload the file\nWe will take the temporary file that was returned by the\nWriter\nand use Laravel's\nResponseFactory\nto create a\nSymfony\\Component\\HttpFoundation\\BinaryFileResponse\n. When returning this response in your controller, it will start a download.\n#\nStoring the file\nThe storing of the file will be handled by Laravel's\nFilesystem\n. By default the file will be stored on your\ndefault\ndisk, but you can also pass a custom disk via the\nExcel::store()\nmethod.\n#\nImports Lifecycle Overview\nThis section will try to give you an overview of how the import works behind the scenes.\n#\nImport Object\nEverything starts with the\nImport\nobject. This object\nencapsulates\nyour entire import logic.\nIt both configures and handles the import logic.\nA simple example of an import object is:\nnamespace\nApp\n\\\nImports\n;\nuse\nApp\n\\\nUser\n;\nuse\nIlluminate\n\\\nSupport\n\\\nCollection\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nToCollection\n;\nclass\nUsersImport\nimplements\nToCollection\n{\npublic\nfunction\ncollection\n(\nCollection\n$rows\n)\n{\nforeach\n(\n$rows\nas\n$row\n)\n{\nUser\n::\ncreate\n(\n[\n'name'\n=>\n$row\n[\n0\n]\n,\n]\n)\n;\n}\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nIf you want to read more about imports objects, go to the architecture page of\nimports objects\n.\n#\nPassing on the Import object\nNext the Import object will be passed on to the Laravel Excel package. The main entry point for this is the\nMaatwebsite/Excel/Excel\nclass. This class can be called in the same way as outlined in the Export lifecycle.\n#\nContract\nYou can also use the\nMaatwebsite\\Excel\\Importer\ninterface to decouple more from the concrete Excel manager implementation. The contract offers the same methods as the\nExcel\nclass.\nIt will make it easier to e.g. stub out the Importer in your unit tests. The\nImporter\ncontract can be either injected via the constructor or the method of a controller.\nuse\nApp\n\\\nImports\n\\\nUsersImport\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nImporter\n;\nclass\nImportsController\n{\nprivate\n$importer\n;\npublic\nfunction\n__construct\n(\nImporter\n$importer\n)\n{\n$this\n->\nimporter\n=\n$importer\n;\n}\npublic\nfunction\nimport\n(\n)\n{\nreturn\n$this\n->\nimporter\n->\nimport\n(\nnew\nUsersImport\n,\n'users.xlsx'\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n#\nImportable trait\nIf you prefer a sprinkle of magic, you can use the\nMaatwebsite\\Excel\\Concerns\\Importable\ntrait in your\nImport\nobject. This trait will expose a couple of methods that will make it possible to directly import an\nImport\nobject.\nnamespace\nApp\n\\\nImports\n;\nuse\nApp\n\\\nUser\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nToCollection\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nImportable\n;\nclass\nUsersImport\nimplements\nToCollection\n{\nuse\nImportable\n;\n...\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\nYou can now import without the need for the\nfacade\nor\nExcel\nmanager.\n(\nnew\nUsersImport\n)\n->\nimport\n(\n'users.xlsx'\n)\n;\n1\nRead more about the importable trait in the\nimportables\ndocs.\n#\nHandling the Import object\n#\nReader type detection\nAfter using one of the above methods to pass on the\nImport\nobject to the\nExcel\nmanager, it will try to figure out what reader type it is .\nThis will be either based on the extension of the file or the explicitly passed reader type. You can find the extension to reader type mapping in the\nexcel.php\nconfig, in the\nextension_detector\nsection.\nIn case no reader type can be detected, a\nMaatwebsite\\Excel\\Exceptions\\NoTypeDetectedException\nexception is thrown and the import process will be stopped.\n#\nStarting the Reading process\nThe\nExcel\nmanager will then delegate the handling to the\nMaatwebsite\\Excel\\Reader\n. The first action of the\nReader\nis to register the event listeners that are registered.\nIt will copy the file from Laravel's\nFilesystem\nto the local filesystem, so PhpSpreadsheet can read it.\nNext it will create a PhpSpreadsheet\nReader\nbased on the reader type that was given and load the file into a\nPhpOffice\\PhpSpreadsheet\\Spreadsheet\ninstance.\nNext it will create a new\nPhpOffice\\PhpSpreadsheet\\Spreadsheet\ninstance that we will use to read our\nImport\nobject from.\nThe first event that is raised, is the\nBeforeImport\nevent. This is raised just after the\nSpreadsheet\ninstance is loaded and allows early access to it.\n#\nMultiple sheets\nNext we will determine if we are dealing with multiple sheets. This is done based on the\nWithMultipleSheets\nconcern.\n#\nProcessing the sheets\nThen each Sheet gets processed. This process gets started off by raising the\nBeforeSheet\nevent.\nThen it will either import it to a Collection, an array or handle each row as an Eloquent model.\nWhen using\nToModel\n, each returned model will be persisted via Eloquent. When using this in combination with\nWithBatchInserts\n, it will defer the persistence till the batch is complete and then insert them as one batch in the database.\nWhen using\nToCollection\nor\nToArray\n, the entire dataset will be passed to the Import method and the user can determine itself how to use it.\nThe sheet handling is ended by raising the\nAfterSheet\nevent.\nâ\nSupport\nImport & Export Objects\nâ",
+    "all_text": "Lifecycle | Laravel Excel\nGetting Started\nArchitecture Concepts\nLifecycle\nImport & Export Objects\nConcerns\nExports\nImports\n#\nLifecycle\nIntroduction\nExports Lifecycle Overview\nExport Object\nPassing on the Export object\nHandling the Export object\nPassing on to PhpSpreadsheet\nCreating a Response\nImports Lifecycle Overview\nImport Object\nPassing on the Import object\nHandling the Import object\n#\nIntroduction\nWhen using a package in your application, it's good to understand how the package functions behind the scenes.\nUnderstanding the behind-the-scenes will make you feel more comfortable and confident using the maximum potential of the tool.\nThe goal of this page is to give you a high-level overview of how Laravel Excel works.\n#\nExports Lifecycle Overview\nThis section will try to give you an overview of how the export works behind the scenes.\n#\nExport Object\nEverything starts with the\nExport\nobject. This object\nencapsulates\nyour entire export logic.\nIt both configures and handles the export logic.\nA simple example of an export object is:\n<?php\nnamespace\nApp\n\\\nExports\n;\nuse\nApp\n\\\nUser\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nFromCollection\n;\nclass\nUsersExport\nimplements\nFromCollection\n{\npublic\nfunction\ncollection\n(\n)\n{\nreturn\nUser\n::\nall\n(\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\nIf you want to read more about export objects, go to the architecture page of\nexport objects\n.\n#\nPassing on the Export object\nNext the Export object will be passed on to the Laravel Excel package. The main entry point for this is the\nMaatwebsite/Excel/Excel\nclass. This class can be called in multiple ways.\n#\nFacade\nThe easiest way to work with the\nExcel\nclass is to use the\nMaatwebsite\\Excel\\Facades\\Excel\nfacade.\nIf you use\nauto-discovery\n(opens new window)\n, you can use the alias\n\\Excel\ndirectly instead of using the fully qualified namespace.\n#\nDependency injection\nYou can inject the\nMaatwebsite/Excel/Excel\nmanager class into your class, either via constructor injection\nor method injection in case of a controller.\n<?php\nuse\nApp\n\\\nExports\n\\\nUsersExport\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nExcel\n;\nclass\nExportController\n{\nprivate\n$excel\n;\npublic\nfunction\n__construct\n(\nExcel\n$excel\n)\n{\n$this\n->\nexcel\n=\n$excel\n;\n}\npublic\nfunction\nexportViaConstructorInjection\n(\n)\n{\nreturn\n$this\n->\nexcel\n->\ndownload\n(\nnew\nUsersExport\n,\n'users.xlsx'\n)\n;\n}\npublic\nfunction\nexportViaMethodInjection\n(\nExcel\n$excel\n)\n{\nreturn\n$excel\n->\ndownload\n(\nnew\nUsersExport\n,\n'users.xlsx'\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n#\nContract\nYou can also use the\nMaatwebsite\\Excel\\Exporter\ninterface to decouple more from the concrete Excel manager implementation. The contract offers the same methods as the\nExcel\nclass.\nIt will make it easier to e.g. stub out the Exporter in your unit tests. The\nExporter\ncontract can be either injected via the constructor or a method in a controller.\nuse\nApp\n\\\nExports\n\\\nUsersExport\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nExporter\n;\nclass\nExportsController\n{\nprivate\n$exporter\n;\npublic\nfunction\n__construct\n(\nExporter\n$exporter\n)\n{\n$this\n->\nexporter\n=\n$exporter\n;\n}\npublic\nfunction\nexport\n(\n)\n{\nreturn\n$this\n->\nexporter\n->\ndownload\n(\nnew\nUsersExport\n,\n'users.xlsx'\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n#\nContainer binding\nIf you want to bind the\nMaatwebsite\\Excel\\Excel\nmanager to your own class via a container binding, you can use the\nexcel\ncontainer binding.\n$this\n->\napp\n->\nbind\n(\nYourCustomExporter\n::\nclass\n,\nfunction\n(\n)\n{\nreturn\nnew\nYourCustomExporter\n(\n$this\n->\napp\n[\n'excel'\n]\n)\n;\n}\n)\n;\n1\n2\n3\n#\nExportable trait\nIf you prefer a sprinkle of magic, you can use the\nMaatwebsite\\Excel\\Concerns\\Exportable\ntrait in your\nExport\nobject. This trait will expose a couple of methods that will make it possible to directly export an\nExport\nobject.\nnamespace\nApp\n\\\nExports\n;\nuse\nApp\n\\\nUser\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nFromCollection\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nExportable\n;\nclass\nUsersExport\nimplements\nFromCollection\n{\nuse\nExportable\n;\npublic\nfunction\ncollection\n(\n)\n{\nreturn\nUser\n::\nall\n(\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\nYou can now download the export without the need for the\nfacade\nor\nExcel\nmanager.\nreturn\n(\nnew\nUsersExport\n)\n->\ndownload\n(\n'users.xlsx'\n)\n;\n1\nRead more about the exportable trait in the\nexportables\ndocs.\n#\nHandling the Export object\n#\nWriter type detection\nAfter using one of the above methods to pass on the\nExport\nobject to the\nExcel\nmanager, it will try to figure out what export it needs to be generated to.\nThis will be either based on the extension of the file, the explicitly passed writer type. You can find the extension to writer type mapping in the\nexcel.php\nconfig, in the\nextension_detector\nsection.\nIn case no writer type can be detected, a\nMaatwebsite\\Excel\\Exceptions\\NoTypeDetectedException\nexception is thrown and the export process will be stopped.\n#\nStarting the Writing process\nThe\nExcel\nmanager will then delegate the handling to the\nMaatwebsite\\Excel\\Writer\n. The first action of the\nWriter\nis to register the event listeners that are registered.\nNext it will create a new\nPhpOffice\\PhpSpreadsheet\\Spreadsheet\ninstance that we will use to convert our\nExport\nobject to.\nThe first event raised is the\nBeforeExport\nevent. This is raised just after the\nSpreadsheet\ninstance is created and allows early access to it.\n#\nMultiple sheets\nNext the\nWriter\nwill determine if multiple sheets are configured, by checking for the\nMaatwebsite\\Excel\\Concerns\\WithMultipleSheets\nconcern.\nThen it will delegate the further handling of each sheet to the\nMaatwebsite\\Excel\\Sheet\nclass.\n#\nProcessing the sheets\nIn the\nSheet\nclass, the most heavy lifting happens. It first will create a\nPhpOffice\\PhpSpreadsheet\\Worksheet\\Worksheet\ninstance. Then it will raise the\nBeforeSheet\nevent which allows you to hook into the moment just before the sheet handling starts.\nThen it will determine what kind of export we are dealing with:\nFromQuery\n,\nFromArray\n,\nFromCollection\nor\nFromView\n. Based on that it will start the connected export process.\nFromView\nwill pass on the rendered\nBlade\nview to PhpSpreadsheet's\nHtml\nReader. That Reader will turn the table html into Excel cells. It also handles some inline styles (color and background color) and col/rowspans.\nThe\nQuery\npassed with the\nFromQuery\nwill automatically be chunked and each chunk will be appended to the Sheet. The chunking is done to limit the amount of Eloquent objects it needs to keep in memory. It greatly reduces memory usage.\nThe entire array of Collection will directly be appended to the Sheet.\nWhen the\nSheet\nstarts appending records, it will first call the\nmap()\nmethod if the\nWithMapping\nconcern is used. This allows the\nExport\nobject to format the data before it is inserted.\nThen it will handle column formatting (\nWithColumnFormatting\nconcern) and cell autosizing (\nShouldAutoSize\n).\nTo close off the Sheet processing, it will raise a\nAfterSheet\nevent.\n#\nPassing on to PhpSpreadsheet\nAfter the sheets are processed, the writing process will start. The writing process is started by raising the\nBeforeWriting\nevent; this allows you to hook into the process of writing.\nNext we will create a new\nPhpSpreadsheet Writer\nbased on the writer type that was determined. Then it will save it to a temporary file and return that filepath to the\nExcel\nmanager.\n#\nCreating a Response\nThe\nExcel\nmanager basically has 2 types of responses, it either starts the\ndownload\nprocess or it will\nstore\nthe file to disk.\n#\nDownload the file\nWe will take the temporary file that was returned by the\nWriter\nand use Laravel's\nResponseFactory\nto create a\nSymfony\\Component\\HttpFoundation\\BinaryFileResponse\n. When returning this response in your controller, it will start a download.\n#\nStoring the file\nThe storing of the file will be handled by Laravel's\nFilesystem\n. By default the file will be stored on your\ndefault\ndisk, but you can also pass a custom disk via the\nExcel::store()\nmethod.\n#\nImports Lifecycle Overview\nThis section will try to give you an overview of how the import works behind the scenes.\n#\nImport Object\nEverything starts with the\nImport\nobject. This object\nencapsulates\nyour entire import logic.\nIt both configures and handles the import logic.\nA simple example of an import object is:\nnamespace\nApp\n\\\nImports\n;\nuse\nApp\n\\\nUser\n;\nuse\nIlluminate\n\\\nSupport\n\\\nCollection\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nToCollection\n;\nclass\nUsersImport\nimplements\nToCollection\n{\npublic\nfunction\ncollection\n(\nCollection\n$rows\n)\n{\nforeach\n(\n$rows\nas\n$row\n)\n{\nUser\n::\ncreate\n(\n[\n'name'\n=>\n$row\n[\n0\n]\n,\n]\n)\n;\n}\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\nIf you want to read more about imports objects, go to the architecture page of\nimports objects\n.\n#\nPassing on the Import object\nNext the Import object will be passed on to the Laravel Excel package. The main entry point for this is the\nMaatwebsite/Excel/Excel\nclass. This class can be called in the same way as outlined in the Export lifecycle.\n#\nContract\nYou can also use the\nMaatwebsite\\Excel\\Importer\ninterface to decouple more from the concrete Excel manager implementation. The contract offers the same methods as the\nExcel\nclass.\nIt will make it easier to e.g. stub out the Importer in your unit tests. The\nImporter\ncontract can be either injected via the constructor or the method of a controller.\nuse\nApp\n\\\nImports\n\\\nUsersImport\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nImporter\n;\nclass\nImportsController\n{\nprivate\n$importer\n;\npublic\nfunction\n__construct\n(\nImporter\n$importer\n)\n{\n$this\n->\nimporter\n=\n$importer\n;\n}\npublic\nfunction\nimport\n(\n)\n{\nreturn\n$this\n->\nimporter\n->\nimport\n(\nnew\nUsersImport\n,\n'users.xlsx'\n)\n;\n}\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n#\nImportable trait\nIf you prefer a sprinkle of magic, you can use the\nMaatwebsite\\Excel\\Concerns\\Importable\ntrait in your\nImport\nobject. This trait will expose a couple of methods that will make it possible to directly import an\nImport\nobject.\nnamespace\nApp\n\\\nImports\n;\nuse\nApp\n\\\nUser\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nToCollection\n;\nuse\nMaatwebsite\n\\\nExcel\n\\\nConcerns\n\\\nImportable\n;\nclass\nUsersImport\nimplements\nToCollection\n{\nuse\nImportable\n;\n...\n}\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\nYou can now import without the need for the\nfacade\nor\nExcel\nmanager.\n(\nnew\nUsersImport\n)\n->\nimport\n(\n'users.xlsx'\n)\n;\n1\nRead more about the importable trait in the\nimportables\ndocs.\n#\nHandling the Import object\n#\nReader type detection\nAfter using one of the above methods to pass on the\nImport\nobject to the\nExcel\nmanager, it will try to figure out what reader type it is .\nThis will be either based on the extension of the file or the explicitly passed reader type. You can find the extension to reader type mapping in the\nexcel.php\nconfig, in the\nextension_detector\nsection.\nIn case no reader type can be detected, a\nMaatwebsite\\Excel\\Exceptions\\NoTypeDetectedException\nexception is thrown and the import process will be stopped.\n#\nStarting the Reading process\nThe\nExcel\nmanager will then delegate the handling to the\nMaatwebsite\\Excel\\Reader\n. The first action of the\nReader\nis to register the event listeners that are registered.\nIt will copy the file from Laravel's\nFilesystem\nto the local filesystem, so PhpSpreadsheet can read it.\nNext it will create a PhpSpreadsheet\nReader\nbased on the reader type that was given and load the file into a\nPhpOffice\\PhpSpreadsheet\\Spreadsheet\ninstance.\nNext it will create a new\nPhpOffice\\PhpSpreadsheet\\Spreadsheet\ninstance that we will use to read our\nImport\nobject from.\nThe first event that is raised, is the\nBeforeImport\nevent. This is raised just after the\nSpreadsheet\ninstance is loaded and allows early access to it.\n#\nMultiple sheets\nNext we will determine if we are dealing with multiple sheets. This is done based on the\nWithMultipleSheets\nconcern.\n#\nProcessing the sheets\nThen each Sheet gets processed. This process gets started off by raising the\nBeforeSheet\nevent.\nThen it will either import it to a Collection, an array or handle each row as an Eloquent model.\nWhen using\nToModel\n, each returned model will be persisted via Eloquent. When using this in combination with\nWithBatchInserts\n, it will defer the persistence till the batch is complete and then insert them as one batch in the database.\nWhen using\nToCollection\nor\nToArray\n, the entire dataset will be passed to the Import method and the user can determine itself how to use it.\nThe sheet handling is ended by raising the\nAfterSheet\nevent.\nâ\nSupport\nImport & Export Objects\nâ"
+  }
+]
